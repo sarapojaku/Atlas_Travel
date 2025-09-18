@@ -14,7 +14,7 @@
       <span>Atlas Travel</span>
     </div>
     <div class="footer-right">
-      <a href="#">+355 6x xxx xxxx</a>
+      <a href="#">+355 69 357 5102</a>
       <a href="#">Instagram</a>
       <a href="#">Facebook</a>
     </div>
