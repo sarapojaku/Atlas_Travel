@@ -71,6 +71,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         text-align: center;
         color: #000;
     }
+    a {
+      text-decoration: none;
+    }
+    a:hover {
+      text-decoration: underline;
+    }
   </style>
 </head>
 <body>
@@ -80,7 +86,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <input type="text" name="username" placeholder="Username" required />
     <input type="password" name="password" placeholder="Password" required />
     <button type="submit">Log In</button>
-    <p>Don’t have an account? <a href="clientRegister.php">Sign Up</a></p>
+    <p>Don’t have an account?</p>
+    <p><a href="clientRegister.php">Sign Up</a></p>
 </form>
 </body>
 </html>
