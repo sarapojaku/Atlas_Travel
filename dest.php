@@ -146,7 +146,8 @@ $imagePath = "uploads/";
   h6 {
     text-align: center;
     font-weight: lighter;
-    font-size: 15px;
+    font-size: 20px;
+    margin-top: 10px;
   }
   </style> 
 </head> 
