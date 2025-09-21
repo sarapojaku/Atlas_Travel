@@ -19,7 +19,7 @@ include 'db_connect.php';
       <span>Atlas Travel</span>
     </a>
     <nav class="nav-links">
-      <a href="#accomodation">Accomodation</a>
+      <a href="#deals">Destination</a>
       <a href="#contact">Contact Us</a>
       <?php if (isset($_SESSION['username'])): ?>
         <span class="user-links">
