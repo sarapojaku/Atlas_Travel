@@ -8,9 +8,7 @@ include 'db_connect.php';
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Contact Us</title>
-    <link rel="stylesheet" href="styles.css"/>
 <style>
-    /* Contact Us */
     .contact-form {
         margin-top: 1rem;
         display: grid;
