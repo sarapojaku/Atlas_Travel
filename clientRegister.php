@@ -25,7 +25,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if ($stmt->execute()) {
             $_SESSION['user_id'] = $stmt->insert_id;
             $_SESSION['username'] = $Username;
-            header("Location: index.php");
+            header("Location: header.php");
             exit;
         } else {
             $error = "Error creating account!";

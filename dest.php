@@ -1,5 +1,5 @@
 <?php
-session_start();
+// session_start();
 include 'db_connect.php'; 
 
 // Fetch all destinations
@@ -76,6 +76,7 @@ h5 {
 
 .deal h2 {
   margin-bottom: 5px;
+  font-size: 20px;
 }
 
 .deal img {
