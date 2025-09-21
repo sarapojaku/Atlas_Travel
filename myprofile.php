@@ -172,7 +172,10 @@ $pastTrips = $pastQuery->get_result();
     .nav-links > a { 
         font-weight: bold; 
         color: #ffffff; 
-        cursor: pointer; 
+        cursor: pointer;
+    }
+    .nav-links > a:hover{
+        text-decoration: underline; 
     }
     .sep { 
         color: #ffffff; 
@@ -257,37 +260,6 @@ $pastTrips = $pastQuery->get_result();
         font-style: italic; 
         color: var(--muted); 
         margin-top: .5rem; 
-    }
-    .footer {
-        border-top: 1px solid var(--border);
-        padding: 1.5rem 0;
-        background: var(--bg);
-    }
-    .footer-inner { 
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-    }
-    .footer-left {
-        display: flex;
-        align-items: center;
-        gap: 0.5rem;
-        font-weight: 900;
-        color: #ffffff;
-    }
-    .footer-left img {
-        width: 32px;
-        height: 32px;
-    }
-    .footer-right {
-        display: flex;
-        align-items: center;
-        gap: 2rem;
-    }
-    .footer a {
-        color: #ffffff;
-        font-weight: 700;
-        text-decoration: none;
     }
   </style>
 </head>
@@ -395,18 +367,7 @@ $pastTrips = $pastQuery->get_result();
 </main>
 
 <!-- Footer Section -->
-<footer class="footer">
-  <div class="container footer-inner">
-    <div class="footer-left">
-      <img src="images/logo.png" alt="TravelAgency Logo" />
-      <span>TravelAgency</span>
-    </div>
-    <div class="footer-right">
-      <a href="#">+355 6x xxx xxxx</a>
-      <a href="#">Instagram</a>
-      <a href="#">Facebook</a>
-    </div>
-  </div>
-</footer>
+<?php include 'footer.php';?> 
+
 </body>
 </html>
