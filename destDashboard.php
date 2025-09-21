@@ -40,7 +40,11 @@ $imagePath = "uploads/";
             <div>
                 <h4><?php echo htmlspecialchars($dest['DestinationName']); ?></h4>
                 <p>Price: $<?php echo $dest['DestinationPrice']; ?></p>
-                <p><?php echo $dest['StartDate']; ?> - <?php echo $dest['EndDate']; ?></p>
+                <p>
+                    <?php echo date("d/m/Y", strtotime($dest['StartDate'])); ?> 
+                    - 
+                    <?php echo date("d/m/Y", strtotime($dest['EndDate'])); ?>
+                </p>
                 <p><b>Country:</b> <?php echo htmlspecialchars($dest['CountryName']); ?></p>
             </div>
         </div>

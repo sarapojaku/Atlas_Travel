@@ -68,74 +68,97 @@ $imagePath = "uploads/";
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>All Destinations</title>
-    <style>
-        .sidebar {
-            width: 200px;
-            float: left;
-            padding: 10px;
-            background: #f4f4f4;
-        }
-        .sidebar a {
-            display: block;
-            padding: 8px;
-            margin-bottom: 5px;
-            background: #ddd;
-            text-decoration: none;
-            color: #333;
-            border-radius: 4px;
-        }
-        .sidebar a:hover {
-            background: #bbb;
-        }
-        .main-content {
-            margin-left: 220px;
-            padding: 20px;
-        }
-        .destination-card {
-            border: 1px solid #ddd;
-            padding: 10px;
-            margin: 10px 0;
-            border-radius: 6px;
-            display: flex;
-            gap: 10px;
-            align-items: center;
-        }
-        .destination-card img {
-            width: 120px;
-            height: 80px;
-            object-fit: cover;
-            border-radius: 6px;
-        }
-        .pagination {
-            margin-top: 20px;
-        }
-        .pagination a {
-            display: inline-block;
-            padding: 6px 10px;
-            margin: 0 3px;
-            border: 1px solid #ddd;
-            text-decoration: none;
-            color: #333;
-            border-radius: 4px;
-        }
-        .pagination a.active {
-            background: #333;
-            color: #fff;
-        }
-        .pagination a:hover {
-            background: #555;
-            color: #fff;
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>All Destinations</title>
+<style>
+    body {
+        margin: 0;
+        font-family: Arial, sans-serif;
+    }
+
+    .layout {
+        display: flex;
+        align-items: flex-start;
+        gap: 20px;
+    }
+
+    .sidebar {
+        width: 200px;
+        padding: 10px;
+        background: #f4f4f4;
+        position: sticky;
+        top: 10px;
+        align-self: flex-start;
+        max-height: calc(100vh - 20px);
+        overflow-y: auto;
+        border-radius: 6px;
+    }
+    .sidebar h3 {
+        margin-top: 0;
+    }
+    .sidebar a {
+        display: block;
+        padding: 8px;
+        margin-bottom: 5px;
+        background: #ddd;
+        text-decoration: none;
+        color: #333;
+        border-radius: 4px;
+    }
+    .sidebar a:hover {
+        background: #bbb;
+    }
+
+    .main-content {
+        flex: 1;
+        padding: 20px;
+    }
+
+    .destination-card {
+        border: 1px solid #ddd;
+        padding: 10px;
+        margin: 10px 0;
+        border-radius: 6px;
+        display: flex;
+        gap: 10px;
+        align-items: center;
+    }
+    .destination-card img {
+        width: 120px;
+        height: 80px;
+        object-fit: cover;
+        border-radius: 6px;
+    }
+
+    .pagination {
+        margin-top: 20px;
+    }
+    .pagination a {
+        display: inline-block;
+        padding: 6px 10px;
+        margin: 0 3px;
+        border: 1px solid #ddd;
+        text-decoration: none;
+        color: #333;
+        border-radius: 4px;
+    }
+    .pagination a.active {
+        background: #333;
+        color: #fff;
+    }
+    .pagination a:hover {
+        background: #555;
+        color: #fff;
+    }
+</style>
 </head>
 <body>
-    <?php include 'header.php';?>
+<?php include 'header.php';?>
 
+<div class="layout">
     <!-- Sidebar -->
-    <div class="sidebar" id="sidebar">
+    <div class="sidebar">
         <h3>Countries</h3>
         <a href="allDest.php">All</a>
         <?php foreach ($countries as $country): ?>
@@ -146,11 +169,7 @@ $imagePath = "uploads/";
     </div>
 
     <!-- Main Content -->
-    <div class="main-content" id="content-area">
-        <div class="content-header">
-            <span class="material-icons-outlined hamburger" id="hamburger">menu</span>
-        </div>
-
+    <div class="main-content">
         <?php if (!$selectedCountry): ?>
             <?php include 'destDashboard.php'; ?>
         <?php else: ?>
@@ -163,11 +182,16 @@ $imagePath = "uploads/";
             <?php if (count($destinations) > 0): ?>
                 <?php foreach ($destinations as $dest): ?>
                     <div class="destination-card">
-                        <img src="<?php echo $imagePath . (!empty($dest['DestinationImage']) ? $dest['DestinationImage'] : 'noimage.jpg'); ?>" alt="<?php echo htmlspecialchars($dest['DestinationName']); ?>">
+                        <img src="<?php echo $imagePath . (!empty($dest['DestinationImage']) ? $dest['DestinationImage'] : 'noimage.jpg'); ?>" 
+                             alt="<?php echo htmlspecialchars($dest['DestinationName']); ?>">
                         <div>
                             <h4><?php echo htmlspecialchars($dest['DestinationName']); ?></h4>
                             <p>Price: $<?php echo $dest['DestinationPrice']; ?></p>
-                            <p><?php echo $dest['StartDate']; ?> - <?php echo $dest['EndDate']; ?></p>
+                            <p>
+                                <?php echo date("d/m/Y", strtotime($dest['StartDate'])); ?> 
+                                - 
+                                <?php echo date("d/m/Y", strtotime($dest['EndDate'])); ?>
+                            </p>
                             <p><b>Country:</b> <?php echo htmlspecialchars($dest['CountryName']); ?></p>
                         </div>
                     </div>
@@ -195,12 +219,9 @@ $imagePath = "uploads/";
             <?php endif; ?>
         <?php endif; ?>
     </div>
+</div>
 
-    <!-- Contact Us Section -->
-    <?php include 'contact.php';?>
-
-    <!-- Footer Section -->
-    <?php include 'footer.php';?>
-
+<!-- Footer Section -->
+<?php include 'footer.php';?>
 </body>
 </html>
