@@ -5,6 +5,39 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Footer</title>
     <link rel="stylesheet" href="style.css"/>
+<style>
+    .footer {
+      border-top: 1px solid var(--border);
+      padding: 1.5rem 0;
+      background: var(--bg);
+    }
+    .footer-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .footer-left {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-weight: 900;
+      color: #ffffff;
+    }
+    .footer-left img {
+      width: 32px;
+      height: 32px;
+    }
+    .footer-right {
+      display: flex;
+      align-items: center;
+      gap: 2rem;
+    }
+    .footer a {
+      color: #ffffff;
+      font-weight: 700;
+      text-decoration: none;
+    }
+    </style>
 </head>
 <body>
     <footer class="footer">
