@@ -132,7 +132,7 @@ $imagePath = "uploads/";
     justify-content: center;
     background: var(--bg);
     color: #ffffff;
-    margin: 20px 685px;
+    margin: 10px 685px;
     padding: 7px;
     font-weight: bold;
     border-radius: 20px;
@@ -143,11 +143,16 @@ $imagePath = "uploads/";
     transform: scale(1.05); 
     box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15); 
   }
+  h6 {
+    text-align: center;
+    font-weight: lighter;
+    font-size: 15px;
+  }
   </style> 
 </head> 
 <body> 
   <h5>Here are some of our best deals of the moment!</h5> 
-  <div class="carousel-container"> 
+  <div id="deal" class="carousel-container"> 
     <div class="deals" id="deals"> 
       <?php foreach($destinations as $dest): ?> 
         <div class="deal"> 
@@ -165,7 +170,7 @@ $imagePath = "uploads/";
     <button class="arrow left" onclick="prevDeal()">&#8249;</button> 
     <button class="arrow right" onclick="nextDeal()">&#8250;</button> 
   </div> 
-  
+  <h6>Explore more of our destinations!</h6>
   <a href="allDest.php" class="allDest">All Destinations</a>
 
 
