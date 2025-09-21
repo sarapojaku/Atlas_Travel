@@ -125,7 +125,24 @@ $imagePath = "uploads/";
   } 
   .arrow:focus { 
     outline: none; 
+  }
+  .allDest {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--bg);
+    color: #ffffff;
+    margin: 20px 685px;
+    padding: 7px;
+    font-weight: bold;
+    border-radius: 20px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease; 
   } 
+  .allDest:hover {
+    background: var(--muted);
+    transform: scale(1.05); 
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15); 
+  }
   </style> 
 </head> 
 <body> 
@@ -148,6 +165,10 @@ $imagePath = "uploads/";
     <button class="arrow left" onclick="prevDeal()">&#8249;</button> 
     <button class="arrow right" onclick="nextDeal()">&#8250;</button> 
   </div> 
+  
+  <a href="allDest.php" class="allDest">All Destinations</a>
+
+
 
   <script> 
   const deals = document.getElementById("deals");
