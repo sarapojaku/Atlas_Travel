@@ -32,9 +32,8 @@ $imagePath = "uploads/";
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Learn More</title>
-    <link rel="stylesheet" href="styles.css"/>
-      <link rel="icon" href="images/logo.png" type="image/png" />
-  <link rel="shortcut icon" href="images/logo.png" type="image/png" />
+    <link rel="icon" href="images/logo.png" type="image/png" />
+    <link rel="shortcut icon" href="images/logo.png" type="image/png" />
     <style>
     /* Info */
     .learn-more {
@@ -71,6 +70,20 @@ $imagePath = "uploads/";
     }
     .info ul span {
         font-weight: bold;
+    }
+    .book-btn {
+        display: inline-block;
+        background: #625d5d;
+        color: #ffffff;
+        border-radius: 10px;
+        padding: 5px 15px;
+        margin-top: 10px;
+        transition: transform 0.3s ease, box-shadow 0.3s ease; 
+    }
+    .book-btn:hover {
+    background: #767778;
+    transform: scale(1.05); 
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15); 
     }
     </style>
 </head>
@@ -112,10 +125,9 @@ $imagePath = "uploads/";
                 <span>Date: </span><?php echo date("d/m/Y", strtotime($dest['StartDate'])) . " - " . date("d/m/Y", strtotime($dest['EndDate'])); ?>
                 <li><span>Price: €</span><?php echo htmlspecialchars($dest['DestinationPrice']); ?></li>
             </ul>
-            <a style="background: var(--bg); color:#ffffff; margin-top: 5px;" href="booking.php?id=<?php echo $destinationId; ?>" class="btn">Book Now</a>
+            <!-- <a style="background: var(--bg); color:#ffffff; margin-top: 5px;" href="booking.php?id=<?php echo $destinationId; ?>" class="btn">Book Now</a> -->
+            <a href="booking.php?id=<?php echo $destinationId; ?>" class="book-btn">Book Now</a>
         </div>
-        <!-- <div class="book-btn"> -->
-        <!-- </div> -->
 </section>
 
 <!-- Contact Us Section -->
