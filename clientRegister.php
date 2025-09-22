@@ -1,4 +1,4 @@
-<?php 
+<?php  
 session_start();
 include 'db_connect.php';
 
@@ -60,45 +60,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         background: #625d5d;
         margin: 0;
     }
-    .container {
-      max-width: 700px;
-      margin: 2rem auto;
-      background: #ffffff;
-      padding: 2rem;
-      border-radius: 12px;
-    }
-    /* form {
+    form {
         background: #fff;
         padding: 2rem;
         border-radius: 12px;
         box-shadow: 0 8px 20px rgba(0,0,0,0.2);
-        width: 300px;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-    } */
-    input, select {
-        display: block;
-        margin: 0.5rem auto;
-        padding: 0.7rem;
-        border-radius: 8px;
-        border: 1px solid #ddd;
-        width: 90%;
-        box-sizing: border-box;
-        height: 40px;
-    }
-    button {
-        padding: 10px 185px;
-        background: #625d5d;
-        color: #fff;
-        border: none;
-        border-radius: 8px;
-        cursor: pointer;
-        display: block;
-        height: 35px;
-    }
-    button:hover {
-        background: #4a4545;
+        width: 500px;
     }
     h1 {
         text-align: center;
@@ -109,17 +76,30 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         margin-bottom: 1rem;
         text-align: center;
     }
-    a {
-        color: #000000;
-        text-decoration: none;
+    .form-row {
+        display: flex;
+        gap: 10px;
+        margin-bottom: 0.8rem;
     }
-    a:hover{
-        text-decoration: underline;
+    .form-row input,
+    .form-row select {
+        flex: 1;
+        padding: 0.7rem;
+        border-radius: 8px;
+        border: 1px solid #ddd;
+        box-sizing: border-box;
+        height: 40px;
+    }
+    .username-status, .password-requirements, .confirm-status {
+        font-size: 0.9rem;
+        margin-top: -5px;
+        margin-bottom: 10px;
+        text-align: center;
     }
     .password-requirements div {
         text-align: left;
         font-size: 0.85rem;
-        margin-left: 10px;
+        margin-left: 5%;
     }
     .strength-meter {
         width: 90%;
@@ -135,98 +115,77 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         background: red;
         transition: width 0.3s ease, background 0.3s ease;
     }
-    /* Grid form layout */
-    .form-grid {
-        background: #ffffff;
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 1rem 2rem;
-        margin-top: 1rem;
+    button {
+        padding: 0.7rem 1.5rem;
+        background: #625d5d;
+        color: #fff;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        display: block;
+        margin: 1rem auto 0 auto;
+        height: 35px;
     }
-    .form-group {
-        display: flex;
-        flex-direction: column;
+    button:hover {
+        background: #4a4545;
     }
-    .form-group label {
-        font-weight: bold;
-        margin-bottom: 0.3rem;
-        color: #444;
+    a {
+        color: #000000;
+        text-decoration: none;
     }
-    .form-group input,
-    .form-group select {
-        padding: 20px;
-        border: 1px solid #ccc;
-        border-radius: 6px;
-    }
-    .end {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        gap: 0.5rem;
-        margin-top: 1rem;
+    a:hover{
+        text-decoration: underline;
     }
 </style>
 </head>
 <body>
 
-<div class="container">
 <form method="POST" onsubmit="return validateForm()">
     <h1>Sign Up</h1>
     <?php if (!empty($error)) echo "<div class='message'>$error</div>"; ?>
     
-    <div class="form-grid">
-        <div class="form-group">
-            <input type="text" id="fname" name="ClientName" placeholder="First Name" required>
-        </div>
-        <div class="form-group">
-            <input type="text" id="lname" name="ClientSurname" placeholder="Surname" required>
-        </div>
-        <div class="form-group">
-            <input type="text" id="username" name="Username" placeholder="Username" required>
-            <div id="username-status" class="username-status"></div>
-        </div>
-        <div class="form-group">
-            <input type="email" name="Email" placeholder="Email" required>
-        </div>
-        <div class="form-group">
-            <input type="text" name="Phone" placeholder="Phone Number" required>
-        </div>
-        <div class="form-group">
-            <select name="Gender" placeholder="Gender" required>
-                <option value="">Select Gender</option>
-                <option value="Male">Male</option>
-                <option value="Female">Female</option>
-                <option value="Other">Other</option>
-            </select>
-        </div>
-        <div class="form-group">
-            <input type="password" id="Password" name="Password" placeholder="Password" required>
-        </div>
-        <div class="form-group">
-            <input type="password" id="ConfirmPassword" name="ConfirmPassword" placeholder="Confirm Password" required>
-        </div>
-        <div class="form-group">
-            <div id="password-status" class="password-requirements">
-                <div id="req-length">• At least 8 characters</div>
-                <div id="req-uppercase">• At least 1 uppercase letter</div>
-                <div id="req-number">• At least 1 number</div>
-                <div id="req-special">• At least 1 special character</div>
-            </div>
-        </div>
-        <div class="form-group">
-            <div class="strength-meter">
-                <div id="strength-bar"></div>
-            </div>
-        </div> 
-        <div id="confirm-status" class="confirm-status"></div>
-    </div> 
-    <div class="end">
-        <button type="submit">Sign Up</button>
-        <p>Already have an account? <a href="client_login.php">Log In</a></p>
+    <div class="form-row">
+        <input type="text" id="fname" name="ClientName" placeholder="First Name" required>
+        <input type="text" id="lname" name="ClientSurname" placeholder="Surname" required>
     </div>
+
+    <div class="form-row">
+        <input type="text" id="username" name="Username" placeholder="Username" required>
+        <input type="email" name="Email" placeholder="Email" required>
+    </div>
+    <div id="username-status" class="username-status"></div>
+
+    <div class="form-row">
+        <select name="Gender" required>
+            <option value="">Select Gender</option>
+            <option value="Male">Male</option>
+            <option value="Female">Female</option>
+            <option value="Other">Other</option>
+        </select>
+        <input type="text" name="Phone" placeholder="Phone Number" required>
+    </div>
+    
+    <div class="form-row">
+        <input type="password" id="Password" name="Password" placeholder="Password" required>
+        <input type="password" id="ConfirmPassword" name="ConfirmPassword" placeholder="Confirm Password" required>
+    </div>
+    
+    <div class="strength-meter">
+        <div id="strength-bar"></div>
+    </div>
+    
+    <div id="password-status" class="password-requirements">
+        <div id="req-length">• At least 8 characters</div>
+        <div id="req-uppercase">• At least 1 uppercase letter</div>
+        <div id="req-number">• At least 1 number</div>
+        <div id="req-special">• At least 1 special character</div>
+    </div>
+    
+    <div id="confirm-status" class="confirm-status"></div>
+    
+    <button type="submit">Sign Up</button>
+    <p style="text-align:center;">Already have an account? <a href="client_login.php">Log In</a></p>
 </form>
-</div>
 
 <script>
 // --- Real-time username generator ---
@@ -317,7 +276,7 @@ document.getElementById("ConfirmPassword").addEventListener("keyup", function() 
         status.textContent = "Passwords do not match!";
         status.style.color = "red";
     } else {
-        status.textContent = "Passwords match ✓";
+        status.textContent = "Passwords match.";
         status.style.color = "green";
     }
 });
