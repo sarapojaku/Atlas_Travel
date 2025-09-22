@@ -121,7 +121,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     .remove-btn:hover {
       background: #b02a37;
     }
-
     /* Grid form layout */
     .form-grid {
       display: grid;
@@ -144,7 +143,29 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
       border: 1px solid #ccc;
       border-radius: 6px;
     }
-
+    /* Change password line */
+    .change-password {
+      grid-column: span 2;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      margin-top: 1rem;
+      font-weight: bold;
+      color: #000;
+    }
+    .change-password a {
+      padding: 6px 12px;
+      background: #2563eb;
+      color: #fff;
+      border-radius: 20px;
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: lighter;
+    }
+    .change-password a:hover {
+      background: #1d4ed8;
+    }
     /* Save button */
     .save-btn {
       grid-column: span 2;
@@ -209,6 +230,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <option value="Female" <?= $client['Gender']=="Female"?"selected":"" ?>>Female</option>
             <option value="Other" <?= $client['Gender']=="Other"?"selected":"" ?>>Other</option>
           </select>
+        </div>
+        <div class="change-password">
+          <span>Do you want to change your password?</span>
+          <a href="changePassword.php" class="change-btn">Change Password</a>
         </div>
         <button type="submit" class="save-btn">Save Changes</button>
       </div>
