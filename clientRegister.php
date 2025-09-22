@@ -1,4 +1,4 @@
-<?php
+<?php 
 session_start();
 include 'db_connect.php';
 
@@ -11,8 +11,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Backend password validation
     if ($password !== $confirm) {
         $error = "Passwords do not match!";
-    } elseif (!preg_match('/^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[\W_]).{8,}$/', $password)) {
-        $error = "Password must be at least 8 characters, include 1 uppercase, 1 lowercase, 1 number, and 1 special character.";
+    } elseif (!preg_match('/^(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/', $password)) {
+        $error = "Password must be at least 8 characters, include 1 uppercase letter, 1 number, and 1 special character.";
     } else {
         $ClientName    = $_POST['ClientName'];
         $ClientSurname = $_POST['ClientSurname'];
@@ -48,6 +48,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <head>
 <meta charset="UTF-8">
 <title>Sign Up</title>
+<link rel="icon" href="images/logo.png" type="image/png" />
+<link rel="shortcut icon" href="images/logo.png" type="image/png" />
 <style>
     body {
         font-family: sans-serif;
@@ -86,7 +88,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         border-radius: 8px;
         cursor: pointer;
         display: block;
-        margin: 1rem auto 0 auto;
+        /* margin: 1rem auto 0 auto; */
         height: 35px;
     }
     button:hover {
@@ -114,10 +116,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         margin-bottom: 10px;
         text-align: center;
     }
+
     .password-requirements div {
         text-align: left;
-        margin-left: 5%;
         font-size: 0.85rem;
+        margin-right: 95px;
     }
     .strength-meter {
         width: 90%;
@@ -166,7 +169,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <div id="password-status" class="password-requirements">
         <div id="req-length">• At least 8 characters</div>
         <div id="req-uppercase">• At least 1 uppercase letter</div>
-        <div id="req-lowercase">• At least 1 lowercase letter</div>
         <div id="req-number">• At least 1 number</div>
         <div id="req-special">• At least 1 special character</div>
     </div>
@@ -235,25 +237,22 @@ passwordField.addEventListener("keyup", function() {
     
     document.getElementById("req-length").style.color = value.length >= 8 ? "green" : "red";
     document.getElementById("req-uppercase").style.color = /[A-Z]/.test(value) ? "green" : "red";
-    document.getElementById("req-lowercase").style.color = /[a-z]/.test(value) ? "green" : "red";
     document.getElementById("req-number").style.color = /\d/.test(value) ? "green" : "red";
     document.getElementById("req-special").style.color = /[\W_]/.test(value) ? "green" : "red";
 
     let strength = 0;
     if (value.length >= 8) strength++;
     if (/[A-Z]/.test(value)) strength++;
-    if (/[a-z]/.test(value)) strength++;
     if (/\d/.test(value)) strength++;
     if (/[\W_]/.test(value)) strength++;
 
     const bar = document.getElementById("strength-bar");
     switch (strength) {
         case 0: bar.style.width="0%"; bar.style.background="red"; break;
-        case 1: bar.style.width="20%"; bar.style.background="red"; break;
-        case 2: bar.style.width="40%"; bar.style.background="orange"; break;
-        case 3: bar.style.width="60%"; bar.style.background="#e6c300"; break;
-        case 4: bar.style.width="80%"; bar.style.background="blue"; break;
-        case 5: bar.style.width="100%"; bar.style.background="green"; break;
+        case 1: bar.style.width="25%"; bar.style.background="red"; break;
+        case 2: bar.style.width="50%"; bar.style.background="orange"; break;
+        case 3: bar.style.width="75%"; bar.style.background="blue"; break;
+        case 4: bar.style.width="100%"; bar.style.background="green"; break;
     }
 });
 
@@ -278,7 +277,7 @@ document.getElementById("ConfirmPassword").addEventListener("keyup", function() 
 function validateForm() {
     const password = passwordField.value;
     const confirm = document.getElementById("ConfirmPassword").value;
-    const regex = /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[\W_]).{8,}$/;
+    const regex = /^(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/;
 
     if (!regex.test(password)) return false;
     if (password !== confirm) return false;
