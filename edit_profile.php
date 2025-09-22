@@ -63,6 +63,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Edit Profile</title>
+  <link rel="icon" href="images/logo.png" type="image/png" />
+  <link rel="shortcut icon" href="images/logo.png" type="image/png" />
   <style>
     body {
       font-family: Arial, sans-serif;
