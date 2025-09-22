@@ -90,7 +90,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         box-sizing: border-box;
         height: 40px;
     }
-    .username-status, .password-requirements, .confirm-status {
+    .password-requirements, .confirm-status {
         font-size: 0.9rem;
         margin-top: -5px;
         margin-bottom: 10px;
