@@ -9,8 +9,8 @@ $offset = ($page - 1) * $limit;
 // Fetch destinations
 $sql = "SELECT d.DestinationID, d.DestinationName, d.DestinationImage, d.DestinationPrice, 
                d.StartDate, d.EndDate, c.CountryName
-        FROM Destination d
-        JOIN Country c ON d.CountryID = c.CountryID
+        FROM destination d
+        JOIN country c ON d.CountryID = c.CountryID
         LIMIT ? OFFSET ?";
 $stmt = $conn->prepare($sql);
 $stmt->bind_param("ii", $limit, $offset);
@@ -25,7 +25,7 @@ if ($result && $result->num_rows > 0) {
 }
 
 // Count total for pagination
-$countSql = "SELECT COUNT(*) AS total FROM Destination";
+$countSql = "SELECT COUNT(*) AS total FROM destination";
 $total = $conn->query($countSql)->fetch_assoc()['total'];
 $totalPages = ceil($total / $limit);
 
@@ -35,17 +35,22 @@ $imagePath = "uploads/";
 <h2>All Destinations</h2>
 <?php if (count($destinations) > 0): ?>
     <?php foreach ($destinations as $dest): ?>
-        <div class="destination-card">
-            <img src="<?php echo $imagePath . (!empty($dest['DestinationImage']) ? $dest['DestinationImage'] : 'noimage.jpg'); ?>" alt="<?php echo htmlspecialchars($dest['DestinationName']); ?>">
-            <div>
-                <h4><?php echo htmlspecialchars($dest['DestinationName']); ?></h4>
-                <p>Price: $<?php echo $dest['DestinationPrice']; ?></p>
-                <p>
-                    <?php echo date("d/m/Y", strtotime($dest['StartDate'])); ?> 
-                    - 
-                    <?php echo date("d/m/Y", strtotime($dest['EndDate'])); ?>
-                </p>
-                <p><b>Country:</b> <?php echo htmlspecialchars($dest['CountryName']); ?></p>
+        <div class="destinations">
+            <div class="destination-card">
+                <img src="<?php echo $imagePath . (!empty($dest['DestinationImage']) ? $dest['DestinationImage'] : 'noimage.jpg'); ?>" alt="<?php echo htmlspecialchars($dest['DestinationName']); ?>">
+                <div>
+                    <h4><?php echo htmlspecialchars($dest['DestinationName']); ?></h4>
+                    <p>Price: $<?php echo $dest['DestinationPrice']; ?></p>
+                    <p>
+                        <?php echo date("d/m/Y", strtotime($dest['StartDate'])); ?> 
+                        - 
+                        <?php echo date("d/m/Y", strtotime($dest['EndDate'])); ?>
+                    </p>
+                    <p><b>Country:</b> <?php echo htmlspecialchars($dest['CountryName']); ?></p>
+                </div>
+            </div>
+            <div class="learn-more">
+                <a href="info.php?id=<?php echo $dest['DestinationID']; ?>" class="learn-more">Learn More</a> 
             </div>
         </div>
     <?php endforeach; ?>
