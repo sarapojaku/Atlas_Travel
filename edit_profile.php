@@ -113,19 +113,35 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
       object-fit: cover;
       border: 3px solid #2563eb;
     }
+    .picture {
+      display: flex;
+      align-items: center;
+      gap: 2rem;
+    }
+    .pic {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .actions {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      margin-top: 50px;
+    }
     .remove-btn {
-      display: inline-block;
-      margin-top: 0.8rem;
-      background: none;
+      background: #dc3545;
+      color: white;
       border: none;
-      color: #d9534f;
+      margin-right: 140px;
+      border-radius: 6px;
       cursor: pointer;
-      font-size: 0.9rem;
-      text-decoration: underline;
-      padding: 0;
+      font-size: 14px;
+      padding: 8px;
+      margin-top: 5px;
     }
     .remove-btn:hover {
-      color: #b52b27;
+      background: #b02a37;
     }
   </style>
 </head>
@@ -133,11 +149,27 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   <div class="container">
     <h2>Edit Profile</h2>
     <form action="" method="POST" enctype="multipart/form-data">
+      <div class="picture">
+        <div class="pic">
+          <label>Profile Picture</label>
+          <img src="<?= htmlspecialchars($client['ProfileImage'] ?: $defaultImage) ?>" alt="Current Picture">
+        </div>
+        <div class="actions">
+          <input type="file" name="ProfileImage" accept="image/*">
+          <?php if ($client['ProfileImage'] && $client['ProfileImage'] !== $defaultImage): ?>
+            <button type="submit" name="removeImage" class="remove-btn">Remove Picture</button>
+          <?php endif; ?>
+        </div>
+      </div>
+
       <label>First Name</label>
       <input type="text" name="ClientName" value="<?= htmlspecialchars($client['ClientName']) ?>" required>
 
       <label>Last Name</label>
       <input type="text" name="ClientSurname" value="<?= htmlspecialchars($client['ClientSurname']) ?>" required>
+
+      <label>Username</label>
+      <input type="text" name="Username" value="<?= htmlspecialchars($client['Username']) ?>" required>
 
       <label>Email</label>
       <input type="email" name="Email" value="<?= htmlspecialchars($client['Email']) ?>" required>
@@ -152,14 +184,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <option value="Other" <?= $client['Gender']=="Other"?"selected":"" ?>>Other</option>
       </select>
 
-      <label>Profile Picture</label>
-      <img src="<?= htmlspecialchars($client['ProfileImage'] ?: $defaultImage) ?>" alt="Current Picture">
-      <input type="file" name="ProfileImage" accept="image/*">
-
-      <!-- Remove picture option (above Save button) -->
-      <?php if ($client['ProfileImage'] && $client['ProfileImage'] !== $defaultImage): ?>
-        <button type="submit" name="removeImage" class="remove-btn">Remove Picture</button>
-      <?php endif; ?>
 
       <button type="submit">Save Changes</button>
     </form>
