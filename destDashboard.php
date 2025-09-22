@@ -125,8 +125,6 @@ $imagePath = "uploads/";
                         </p>
                         <p><b>Country:</b> <?php echo htmlspecialchars($dest['CountryName']); ?></p>
                     </div>
-
-                    <!-- Learn more button INSIDE card, aligned middle-right -->
                     <div class="card-action">
                         <a href="info.php?id=<?php echo $dest['DestinationID']; ?>" class="learn-more">Learn More</a>
                     </div>
