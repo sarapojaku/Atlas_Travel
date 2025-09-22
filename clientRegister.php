@@ -108,11 +108,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     a:hover{
         text-decoration: underline;
     }
-    .username-status, .password-status {
+    .username-status, .password-requirements, .confirm-status {
         font-size: 0.9rem;
         margin-top: -5px;
         margin-bottom: 10px;
         text-align: center;
+    }
+    .password-requirements div {
+        text-align: left;
+        margin-left: 5%;
+        font-size: 0.85rem;
     }
     .strength-meter {
         width: 90%;
@@ -135,11 +140,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <form method="POST" onsubmit="return validateForm()">
     <h1>Sign Up</h1>
     <?php if (!empty($error)) echo "<div class='message'>$error</div>"; ?>
-    <input type="text" id="fname" name="ClientName" placeholder="First Name" onblur="generateUsername()" required>
-    <input type="text" id="lname" name="ClientSurname" placeholder="Surname" onblur="generateUsername()" required>
     
-    <input type="text" id="username" name="Username" placeholder="Username" 
-    onkeyup="checkUsername()" required>
+    <input type="text" id="fname" name="ClientName" placeholder="First Name" required>
+    <input type="text" id="lname" name="ClientSurname" placeholder="Surname" required>
+    
+    <input type="text" id="username" name="Username" placeholder="Username" required>
     <div id="username-status" class="username-status"></div>
 
     <input type="email" name="Email" placeholder="Email" required>
@@ -152,115 +157,34 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <input type="text" name="Phone" placeholder="Phone Number" required>
     
     <input type="password" id="Password" name="Password" placeholder="Password" required>
-    <div id="password-status" class="password-status"></div>
+    <input type="password" id="ConfirmPassword" name="ConfirmPassword" placeholder="Confirm Password" required>
+    
     <div class="strength-meter">
         <div id="strength-bar"></div>
     </div>
     
-    <input type="password" id="ConfirmPassword" name="ConfirmPassword" placeholder="Confirm Password" required>
-    <div id="confirm-status" class="password-status"></div>
+    <div id="password-status" class="password-requirements">
+        <div id="req-length">• At least 8 characters</div>
+        <div id="req-uppercase">• At least 1 uppercase letter</div>
+        <div id="req-lowercase">• At least 1 lowercase letter</div>
+        <div id="req-number">• At least 1 number</div>
+        <div id="req-special">• At least 1 special character</div>
+    </div>
+    
+    <div id="confirm-status" class="confirm-status"></div>
     
     <button type="submit">Sign Up</button>
     <p>Already have an account? <a href="client_login.php">Log In</a></p>
 </form>
 
 <script>
-
-// Password strength check with progress bar
-document.getElementById("Password").addEventListener("keyup", function() {
-    let password = this.value;
-    let status = document.getElementById("password-status");
-    let bar = document.getElementById("strength-bar");
-    
-    let strength = 0;
-
-    if (password.length >= 8) strength++;
-    if (/[A-Z]/.test(password)) strength++;
-    if (/[a-z]/.test(password)) strength++;
-    if (/\d/.test(password)) strength++;
-    if (/[\W_]/.test(password)) strength++;
-
-    // Update bar and text
-    switch (strength) {
-        case 0:
-            bar.style.width = "0%";
-            status.textContent = "";
-            break;
-        case 1:
-            bar.style.width = "20%";
-            bar.style.background = "red";
-            status.textContent = "Very Weak";
-            status.style.color = "red";
-            break;
-        case 2:
-            bar.style.width = "40%";
-            bar.style.background = "orange";
-            status.textContent = "Weak";
-            status.style.color = "orange";
-            break;
-        case 3:
-            bar.style.width = "60%";
-            bar.style.background = "#e6c300"; // yellow
-            status.textContent = "Medium";
-            status.style.color = "#e6c300";
-            break;
-        case 4:
-            bar.style.width = "80%";
-            bar.style.background = "blue";
-            status.textContent = "Strong";
-            status.style.color = "blue";
-            break;
-        case 5:
-            bar.style.width = "100%";
-            bar.style.background = "green";
-            status.textContent = "Very Strong ✓";
-            status.style.color = "green";
-            break;
-    }
-});
-
-
-// Confirm password check
-document.getElementById("ConfirmPassword").addEventListener("keyup", function() {
-    let password = document.getElementById("Password").value;
-    let confirm = this.value;
-    let status = document.getElementById("confirm-status");
-
-    if (confirm.length === 0) {
-        status.textContent = "";
-    } else if (password !== confirm) {
-        status.textContent = "Passwords do not match!";
-        status.style.color = "red";
-    } else {
-        status.textContent = "Passwords match ✓";
-        status.style.color = "green";
-    }
-});
-
-// Prevent form submit if invalid
-function validateForm() {
-    let password = document.getElementById("Password").value;
-    let confirm = document.getElementById("ConfirmPassword").value;
-    let regex = /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[\W_]).{8,}$/;
-
-    if (!regex.test(password)) {
-        alert("Password does not meet requirements!");
-        return false;
-    }
-    if (password !== confirm) {
-        alert("Passwords do not match!");
-        return false;
-    }
-    return true;
-}
-
-// Username generator (same as before)
+// --- Real-time username generator ---
 function generateUsername() {
     let fname = document.getElementById("fname").value.trim().toLowerCase();
     let lname = document.getElementById("lname").value.trim().toLowerCase();
     let usernameField = document.getElementById("username");
 
-    if (fname.length > 0 && lname.length > 0) {
+    if (fname && lname) {
         let initials = lname.charAt(0);
         let reverseInitials = fname.charAt(0);
         let randomNum = Math.floor(Math.random() * 900 + 100);
@@ -276,14 +200,16 @@ function generateUsername() {
     }
 }
 
-// AJAX username check
+document.getElementById("fname").addEventListener("keyup", generateUsername);
+document.getElementById("lname").addEventListener("keyup", generateUsername);
+
+// --- AJAX username check (after 3 characters) ---
 function checkUsername() {
     let username = document.getElementById("username").value;
     let status = document.getElementById("username-status");
 
     if (username.length < 3) {
-        status.textContent = "Too short!";
-        status.style.color = "red";
+        status.textContent = "";
         return;
     }
 
@@ -301,6 +227,64 @@ function checkUsername() {
     };
     xhr.send("username=" + encodeURIComponent(username));
 }
+
+// --- Password validation ---
+const passwordField = document.getElementById("Password");
+passwordField.addEventListener("keyup", function() {
+    const value = passwordField.value;
+    
+    document.getElementById("req-length").style.color = value.length >= 8 ? "green" : "red";
+    document.getElementById("req-uppercase").style.color = /[A-Z]/.test(value) ? "green" : "red";
+    document.getElementById("req-lowercase").style.color = /[a-z]/.test(value) ? "green" : "red";
+    document.getElementById("req-number").style.color = /\d/.test(value) ? "green" : "red";
+    document.getElementById("req-special").style.color = /[\W_]/.test(value) ? "green" : "red";
+
+    let strength = 0;
+    if (value.length >= 8) strength++;
+    if (/[A-Z]/.test(value)) strength++;
+    if (/[a-z]/.test(value)) strength++;
+    if (/\d/.test(value)) strength++;
+    if (/[\W_]/.test(value)) strength++;
+
+    const bar = document.getElementById("strength-bar");
+    switch (strength) {
+        case 0: bar.style.width="0%"; bar.style.background="red"; break;
+        case 1: bar.style.width="20%"; bar.style.background="red"; break;
+        case 2: bar.style.width="40%"; bar.style.background="orange"; break;
+        case 3: bar.style.width="60%"; bar.style.background="#e6c300"; break;
+        case 4: bar.style.width="80%"; bar.style.background="blue"; break;
+        case 5: bar.style.width="100%"; bar.style.background="green"; break;
+    }
+});
+
+// --- Confirm password ---
+document.getElementById("ConfirmPassword").addEventListener("keyup", function() {
+    let password = document.getElementById("Password").value;
+    let confirm = this.value;
+    let status = document.getElementById("confirm-status");
+
+    if (!confirm) {
+        status.textContent = "";
+    } else if (password !== confirm) {
+        status.textContent = "Passwords do not match!";
+        status.style.color = "red";
+    } else {
+        status.textContent = "Passwords match ✓";
+        status.style.color = "green";
+    }
+});
+
+// --- Form validation ---
+function validateForm() {
+    const password = passwordField.value;
+    const confirm = document.getElementById("ConfirmPassword").value;
+    const regex = /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[\W_]).{8,}$/;
+
+    if (!regex.test(password)) return false;
+    if (password !== confirm) return false;
+    return true;
+}
 </script>
+
 </body>
 </html>
