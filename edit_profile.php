@@ -66,17 +66,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   <style>
     body {
       font-family: Arial, sans-serif;
-      background: #f3f4f6;
+      background: #625d5d;
       margin: 0;
       padding: 0;
     }
     .container {
       max-width: 700px;
       margin: 2rem auto;
-      background: #fff;
+      background: #ffffff;
       padding: 2rem;
       border-radius: 12px;
-      box-shadow: 0 0 15px rgba(0,0,0,0.1);
     }
     h2 {
       margin-bottom: 1.5rem;
