@@ -125,7 +125,6 @@ $imagePath = "uploads/";
                 <span>Date: </span><?php echo date("d/m/Y", strtotime($dest['StartDate'])) . " - " . date("d/m/Y", strtotime($dest['EndDate'])); ?>
                 <li><span>Price: €</span><?php echo htmlspecialchars($dest['DestinationPrice']); ?></li>
             </ul>
-            <!-- <a style="background: var(--bg); color:#ffffff; margin-top: 5px;" href="booking.php?id=<?php echo $destinationId; ?>" class="btn">Book Now</a> -->
             <a href="booking.php?id=<?php echo $destinationId; ?>" class="book-btn">Book Now</a>
         </div>
 </section>
