@@ -47,8 +47,8 @@
       <span>Atlas Travel</span>
     </div>
     <div class="footer-right">
-      <a href="#">+355 69 357 5102</a>
-      <a href="#">Instagram</a>
+      <a href="tel:+355693575102" class="muted">+355 69 357 5102</a>
+      <a href="https://www.instagram.com/whyhatesara/">Instagram</a>
       <a href="#">Facebook</a>
     </div>
   </div>
