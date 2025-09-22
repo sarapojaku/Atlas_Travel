@@ -183,20 +183,25 @@ $imagePath = "uploads/";
             </h2>
             <?php if (count($destinations) > 0): ?>
                 <?php foreach ($destinations as $dest): ?>
-                    <div class="destination-card">
-                        <img src="<?php echo $imagePath . (!empty($dest['DestinationImage']) ? $dest['DestinationImage'] : 'noimage.jpg'); ?>" 
-                             alt="<?php echo htmlspecialchars($dest['DestinationName']); ?>">
-                        <div>
-                            <h4><?php echo htmlspecialchars($dest['DestinationName']); ?></h4>
-                            <p>Price: $<?php echo $dest['DestinationPrice']; ?></p>
-                            <p>
-                                <?php echo date("d/m/Y", strtotime($dest['StartDate'])); ?> 
-                                - 
-                                <?php echo date("d/m/Y", strtotime($dest['EndDate'])); ?>
-                            </p>
-                            <p><b>Country:</b> <?php echo htmlspecialchars($dest['CountryName']); ?></p>
+                    <div class="destinations">
+                        <div class="destination-card">
+                            <img src="<?php echo $imagePath . (!empty($dest['DestinationImage']) ? $dest['DestinationImage'] : 'noimage.jpg'); ?>" 
+                                alt="<?php echo htmlspecialchars($dest['DestinationName']); ?>">
+                            <div>
+                                <h4><?php echo htmlspecialchars($dest['DestinationName']); ?></h4>
+                                <p>Price: $<?php echo $dest['DestinationPrice']; ?></p>
+                                <p>
+                                    <?php echo date("d/m/Y", strtotime($dest['StartDate'])); ?> 
+                                    - 
+                                    <?php echo date("d/m/Y", strtotime($dest['EndDate'])); ?>
+                                </p>
+                                <p><b>Country:</b> <?php echo htmlspecialchars($dest['CountryName']); ?></p>
+                            </div>
                         </div>
-                    </div>
+                        <div class="learn-more">
+                            <a href="info.php?id=<?php echo $dest['DestinationID']; ?>" class="learn-more">Learn More</a> 
+                        </div>
+                </div>
                 <?php endforeach; ?>
 
                 <!-- Pagination -->
