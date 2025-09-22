@@ -103,20 +103,17 @@ $imagePath = "uploads/";
         display: block;
         padding: 8px;
         margin-bottom: 5px;
-        background: #ddd;
+        background: #f4f4f4;
         text-decoration: none;
         color: #333;
-        border-radius: 4px;
     }
     .sidebar a:hover {
         background: #bbb;
     }
-
     .main-content {
         flex: 1;
         padding: 20px;
     }
-
     .destination-card {
         border: 1px solid #ddd;
         padding: 10px;
@@ -132,7 +129,6 @@ $imagePath = "uploads/";
         object-fit: cover;
         border-radius: 6px;
     }
-
     .pagination {
         margin-top: 20px;
     }
