@@ -5,35 +5,44 @@ include 'db_connect.php';
 $error = "";
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $ClientName    = $_POST['ClientName'];
-    $ClientSurname = $_POST['ClientSurname'];
-    $Username      = $_POST['Username'];
-    $Email         = $_POST['Email'];
-    $Gender        = $_POST['Gender'];
-    $Phone         = $_POST['Phone'];
-    $Password      = password_hash($_POST['Password'], PASSWORD_BCRYPT);
+    $password = $_POST['Password'];
+    $confirm  = $_POST['ConfirmPassword'];
 
-    $check = $conn->prepare("SELECT ClientID FROM Client WHERE Username = ?");
-    $check->bind_param("s", $Username);
-    $check->execute();
-    if ($check->get_result()->num_rows > 0) {
-        $error = "Username already taken!";
+    // Backend password validation
+    if ($password !== $confirm) {
+        $error = "Passwords do not match!";
+    } elseif (!preg_match('/^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[\W_]).{8,}$/', $password)) {
+        $error = "Password must be at least 8 characters, include 1 uppercase, 1 lowercase, 1 number, and 1 special character.";
     } else {
-        $stmt = $conn->prepare("INSERT INTO Client (ClientName, ClientSurname, Username, Email, Gender, Phone, Password) VALUES (?, ?, ?, ?, ?, ?, ?)");
-        $stmt->bind_param("sssssss", $ClientName, $ClientSurname, $Username, $Email, $Gender, $Phone, $Password);
+        $ClientName    = $_POST['ClientName'];
+        $ClientSurname = $_POST['ClientSurname'];
+        $Username      = $_POST['Username'];
+        $Email         = $_POST['Email'];
+        $Gender        = $_POST['Gender'];
+        $Phone         = $_POST['Phone'];
+        $PasswordHash  = password_hash($password, PASSWORD_BCRYPT);
 
-        if ($stmt->execute()) {
-            $_SESSION['user_id'] = $stmt->insert_id;
-            $_SESSION['username'] = $Username;
-            header("Location: index.php");
-            exit;
+        $check = $conn->prepare("SELECT ClientID FROM Client WHERE Username = ?");
+        $check->bind_param("s", $Username);
+        $check->execute();
+        if ($check->get_result()->num_rows > 0) {
+            $error = "Username already taken!";
         } else {
-            $error = "Error creating account!";
+            $stmt = $conn->prepare("INSERT INTO Client (ClientName, ClientSurname, Username, Email, Gender, Phone, Password) VALUES (?, ?, ?, ?, ?, ?, ?)");
+            $stmt->bind_param("sssssss", $ClientName, $ClientSurname, $Username, $Email, $Gender, $Phone, $PasswordHash);
+
+            if ($stmt->execute()) {
+                $_SESSION['user_id'] = $stmt->insert_id;
+                $_SESSION['username'] = $Username;
+                header("Location: index.php");
+                exit;
+            } else {
+                $error = "Error creating account!";
+            }
         }
     }
 }
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -92,27 +101,47 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         margin-bottom: 1rem;
         text-align: center;
     }
-    p {
-        text-align: center;
-        margin-top: 0.5rem;
-    }
     a {
         color: #000000;
         text-decoration: none;
     }
-    a:hover {
+    a:hover{
         text-decoration: underline;
+    }
+    .username-status, .password-status {
+        font-size: 0.9rem;
+        margin-top: -5px;
+        margin-bottom: 10px;
+        text-align: center;
+    }
+    .strength-meter {
+        width: 90%;
+        height: 8px;
+        background: #ddd;
+        border-radius: 5px;
+        margin: 5px auto 10px auto;
+        overflow: hidden;
+    }
+    #strength-bar {
+        height: 100%;
+        width: 0%;
+        background: red;
+        transition: width 0.3s ease, background 0.3s ease;
     }
 </style>
 </head>
 <body>
 
-<form method="POST" enctype="multipart/form-data">
+<form method="POST" onsubmit="return validateForm()">
     <h1>Sign Up</h1>
     <?php if (!empty($error)) echo "<div class='message'>$error</div>"; ?>
-    <input type="text" name="ClientName" placeholder="First Name" required>
-    <input type="text" name="ClientSurname" placeholder="Surname" required>
-    <input type="text" name="Username" placeholder="Username" required>
+    <input type="text" id="fname" name="ClientName" placeholder="First Name" onblur="generateUsername()" required>
+    <input type="text" id="lname" name="ClientSurname" placeholder="Surname" onblur="generateUsername()" required>
+    
+    <input type="text" id="username" name="Username" placeholder="Username" 
+    onkeyup="checkUsername()" required>
+    <div id="username-status" class="username-status"></div>
+
     <input type="email" name="Email" placeholder="Email" required>
     <select name="Gender" required>
         <option value="">Select Gender</option>
@@ -121,10 +150,157 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <option value="Other">Other</option>
     </select>
     <input type="text" name="Phone" placeholder="Phone Number" required>
-    <input type="password" name="Password" placeholder="Password" required>
+    
+    <input type="password" id="Password" name="Password" placeholder="Password" required>
+    <div id="password-status" class="password-status"></div>
+    <div class="strength-meter">
+        <div id="strength-bar"></div>
+    </div>
+    
+    <input type="password" id="ConfirmPassword" name="ConfirmPassword" placeholder="Confirm Password" required>
+    <div id="confirm-status" class="password-status"></div>
+    
     <button type="submit">Sign Up</button>
     <p>Already have an account? <a href="client_login.php">Log In</a></p>
 </form>
 
+<script>
+
+// Password strength check with progress bar
+document.getElementById("Password").addEventListener("keyup", function() {
+    let password = this.value;
+    let status = document.getElementById("password-status");
+    let bar = document.getElementById("strength-bar");
+    
+    let strength = 0;
+
+    if (password.length >= 8) strength++;
+    if (/[A-Z]/.test(password)) strength++;
+    if (/[a-z]/.test(password)) strength++;
+    if (/\d/.test(password)) strength++;
+    if (/[\W_]/.test(password)) strength++;
+
+    // Update bar and text
+    switch (strength) {
+        case 0:
+            bar.style.width = "0%";
+            status.textContent = "";
+            break;
+        case 1:
+            bar.style.width = "20%";
+            bar.style.background = "red";
+            status.textContent = "Very Weak";
+            status.style.color = "red";
+            break;
+        case 2:
+            bar.style.width = "40%";
+            bar.style.background = "orange";
+            status.textContent = "Weak";
+            status.style.color = "orange";
+            break;
+        case 3:
+            bar.style.width = "60%";
+            bar.style.background = "#e6c300"; // yellow
+            status.textContent = "Medium";
+            status.style.color = "#e6c300";
+            break;
+        case 4:
+            bar.style.width = "80%";
+            bar.style.background = "blue";
+            status.textContent = "Strong";
+            status.style.color = "blue";
+            break;
+        case 5:
+            bar.style.width = "100%";
+            bar.style.background = "green";
+            status.textContent = "Very Strong ✓";
+            status.style.color = "green";
+            break;
+    }
+});
+
+
+// Confirm password check
+document.getElementById("ConfirmPassword").addEventListener("keyup", function() {
+    let password = document.getElementById("Password").value;
+    let confirm = this.value;
+    let status = document.getElementById("confirm-status");
+
+    if (confirm.length === 0) {
+        status.textContent = "";
+    } else if (password !== confirm) {
+        status.textContent = "Passwords do not match!";
+        status.style.color = "red";
+    } else {
+        status.textContent = "Passwords match ✓";
+        status.style.color = "green";
+    }
+});
+
+// Prevent form submit if invalid
+function validateForm() {
+    let password = document.getElementById("Password").value;
+    let confirm = document.getElementById("ConfirmPassword").value;
+    let regex = /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[\W_]).{8,}$/;
+
+    if (!regex.test(password)) {
+        alert("Password does not meet requirements!");
+        return false;
+    }
+    if (password !== confirm) {
+        alert("Passwords do not match!");
+        return false;
+    }
+    return true;
+}
+
+// Username generator (same as before)
+function generateUsername() {
+    let fname = document.getElementById("fname").value.trim().toLowerCase();
+    let lname = document.getElementById("lname").value.trim().toLowerCase();
+    let usernameField = document.getElementById("username");
+
+    if (fname.length > 0 && lname.length > 0) {
+        let initials = lname.charAt(0);
+        let reverseInitials = fname.charAt(0);
+        let randomNum = Math.floor(Math.random() * 900 + 100);
+
+        let suggestions = [
+            fname + initials,
+            lname + reverseInitials,
+            fname + lname + randomNum
+        ];
+
+        usernameField.value = suggestions[Math.floor(Math.random() * suggestions.length)];
+        checkUsername();
+    }
+}
+
+// AJAX username check
+function checkUsername() {
+    let username = document.getElementById("username").value;
+    let status = document.getElementById("username-status");
+
+    if (username.length < 3) {
+        status.textContent = "Too short!";
+        status.style.color = "red";
+        return;
+    }
+
+    let xhr = new XMLHttpRequest();
+    xhr.open("POST", "check_username.php", true);
+    xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    xhr.onload = function() {
+        if (this.responseText === "taken") {
+            status.textContent = "Username already taken!";
+            status.style.color = "red";
+        } else {
+            status.textContent = "Username available ✓";
+            status.style.color = "green";
+        }
+    };
+    xhr.send("username=" + encodeURIComponent(username));
+}
+</script>
 </body>
 </html>
