@@ -32,6 +32,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     $name = $_POST['ClientName'];
     $surname = $_POST['ClientSurname'];
+    $usernameNew = $_POST['Username'];
     $email = $_POST['Email'];
     $phone = $_POST['Phone'];
     $gender = $_POST['Gender'];
@@ -46,8 +47,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $profileImage = $targetFile;
     }
 
-    $stmt = $conn->prepare("UPDATE Client SET ClientName=?, ClientSurname=?, Email=?, Phone=?, Gender=?, ProfileImage=? WHERE ClientID=?");
-    $stmt->bind_param("ssssssi", $name, $surname, $email, $phone, $gender, $profileImage, $client['ClientID']);
+    $stmt = $conn->prepare("UPDATE Client 
+        SET ClientName=?, ClientSurname=?, Username=?, Email=?, Phone=?, Gender=?, ProfileImage=? 
+        WHERE ClientID=?");
+    $stmt->bind_param("sssssssi", $name, $surname, $usernameNew, $email, $phone, $gender, $profileImage, $client['ClientID']);
     $stmt->execute();
 
     header("Location: myprofile.php");
@@ -68,7 +71,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
       padding: 0;
     }
     .container {
-      max-width: 600px;
+      max-width: 700px;
       margin: 2rem auto;
       background: #fff;
       padding: 2rem;
@@ -78,32 +81,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     h2 {
       margin-bottom: 1.5rem;
       color: #333;
-    }
-    label {
-      display: block;
-      margin-top: 1rem;
-      font-weight: bold;
-      color: #444;
-    }
-    input, select {
-      width: 100%;
-      padding: 0.6rem;
-      margin-top: 0.5rem;
-      border: 1px solid #ccc;
-      border-radius: 6px;
-    }
-    button {
-      margin-top: 1.2rem;
-      padding: 0.7rem 1.2rem;
-      background: #2563eb;
-      color: #fff;
-      border: none;
-      border-radius: 6px;
-      cursor: pointer;
-      font-size: 1rem;
-    }
-    button:hover {
-      background: #1d4ed8;
+      text-align: center;
     }
     img {
       margin-top: 1rem;
@@ -113,10 +91,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
       object-fit: cover;
       border: 3px solid #2563eb;
     }
+    /* Picture section */
     .picture {
       display: flex;
       align-items: center;
       gap: 2rem;
+      margin-bottom: 2rem;
     }
     .pic {
       display: flex;
@@ -133,7 +113,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
       background: #dc3545;
       color: white;
       border: none;
-      margin-right: 140px;
       border-radius: 6px;
       cursor: pointer;
       font-size: 14px;
@@ -143,12 +122,52 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     .remove-btn:hover {
       background: #b02a37;
     }
+
+    /* Grid form layout */
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem 2rem;
+      margin-top: 1rem;
+    }
+    .form-group {
+      display: flex;
+      flex-direction: column;
+    }
+    .form-group label {
+      font-weight: bold;
+      margin-bottom: 0.3rem;
+      color: #444;
+    }
+    .form-group input,
+    .form-group select {
+      padding: 0.6rem;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+    }
+
+    /* Save button */
+    .save-btn {
+      grid-column: span 2;
+      margin-top: 1.5rem;
+      padding: 0.8rem 1.2rem;
+      background: #2563eb;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 1rem;
+    }
+    .save-btn:hover {
+      background: #1d4ed8;
+    }
   </style>
 </head>
 <body>
   <div class="container">
     <h2>Edit Profile</h2>
     <form action="" method="POST" enctype="multipart/form-data">
+      <!-- Profile picture section -->
       <div class="picture">
         <div class="pic">
           <label>Profile Picture</label>
@@ -162,30 +181,38 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         </div>
       </div>
 
-      <label>First Name</label>
-      <input type="text" name="ClientName" value="<?= htmlspecialchars($client['ClientName']) ?>" required>
-
-      <label>Last Name</label>
-      <input type="text" name="ClientSurname" value="<?= htmlspecialchars($client['ClientSurname']) ?>" required>
-
-      <label>Username</label>
-      <input type="text" name="Username" value="<?= htmlspecialchars($client['Username']) ?>" required>
-
-      <label>Email</label>
-      <input type="email" name="Email" value="<?= htmlspecialchars($client['Email']) ?>" required>
-
-      <label>Phone</label>
-      <input type="text" name="Phone" value="<?= htmlspecialchars($client['Phone']) ?>">
-
-      <label>Gender</label>
-      <select name="Gender">
-        <option value="Male" <?= $client['Gender']=="Male"?"selected":"" ?>>Male</option>
-        <option value="Female" <?= $client['Gender']=="Female"?"selected":"" ?>>Female</option>
-        <option value="Other" <?= $client['Gender']=="Other"?"selected":"" ?>>Other</option>
-      </select>
-
-
-      <button type="submit">Save Changes</button>
+      <!-- Grid fields -->
+      <div class="form-grid">
+        <div class="form-group">
+          <label>First Name</label>
+          <input type="text" name="ClientName" value="<?= htmlspecialchars($client['ClientName']) ?>" required>
+        </div>
+        <div class="form-group">
+          <label>Last Name</label>
+          <input type="text" name="ClientSurname" value="<?= htmlspecialchars($client['ClientSurname']) ?>" required>
+        </div>
+        <div class="form-group">
+          <label>Username</label>
+          <input type="text" name="Username" value="<?= htmlspecialchars($client['Username']) ?>" required>
+        </div>
+        <div class="form-group">
+          <label>Email</label>
+          <input type="email" name="Email" value="<?= htmlspecialchars($client['Email']) ?>" required>
+        </div>
+        <div class="form-group">
+          <label>Phone</label>
+          <input type="text" name="Phone" value="<?= htmlspecialchars($client['Phone']) ?>">
+        </div>
+        <div class="form-group">
+          <label>Gender</label>
+          <select name="Gender">
+            <option value="Male" <?= $client['Gender']=="Male"?"selected":"" ?>>Male</option>
+            <option value="Female" <?= $client['Gender']=="Female"?"selected":"" ?>>Female</option>
+            <option value="Other" <?= $client['Gender']=="Other"?"selected":"" ?>>Other</option>
+          </select>
+        </div>
+        <button type="submit" class="save-btn">Save Changes</button>
+      </div>
     </form>
   </div>
 </body>
