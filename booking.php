@@ -43,16 +43,6 @@ $imagePath = "uploads/";
             --shadow: 0 0 15px #b3acac;
             --radius: 16px;
         }
-    /* @media screen and (max-width: 900px) {
-        .infos {
-            flex-direction: column;
-            align-items: center;
-        }
-        .left-col,
-        .form {
-            max-width: 100%;
-        }
-    } */
         .book-form{
             margin-top: 1rem;
             display: grid;
@@ -72,10 +62,10 @@ $imagePath = "uploads/";
             width: 100%;
             padding: 12px 15px;
             border: 1px solid var(--border);
-            border-radius: 20px;
+            border-radius: 10px;
             background: #ffffff;
             font-size: 15px;
-            margin-bottom: 10px;
+            /* margin-bottom: 10px; */
         }
         .book-form button {
             background: #625d5d;
@@ -98,9 +88,12 @@ $imagePath = "uploads/";
             border-radius: 5px;
             transition: opacity 0.5s ease;
         }
+        .card input {
+            margin-bottom: 10px;
+        }
         .card h2 {
             font-weight: lighter;
-            font-size: 20px;
+            font-size: 17px;
         }
         .first {
             display: flex;
@@ -116,38 +109,78 @@ $imagePath = "uploads/";
         }
         .info h2 {
             text-align: center;
+            margin-bottom: 10px;
         }
         .info img {
+            display: block;
+            margin: 0 auto;
             width: 300px;
             height: 300px;
             border-radius: 20px;
             object-fit: cover;
+            margin-bottom: 10px;
+        }
+        .info p {
+            text-align: left;
+            margin-bottom: 10px;
+        }
+        .info h3 {
+            text-align: left;
         }
         .info ul {
-        list-style: none;
-        padding-left: 0;
-        margin-bottom: 10px;
+            text-align: left;
+            list-style: none;
+            padding-left: 0;
+            margin-bottom: 10px;
         }
         .info ul span {
-        font-weight: bold; 
+            font-weight: bold; 
         }
-    </style>
+        @media screen and (max-width: 900px) {
+            .first {
+                flex-direction: column;
+                align-items: center;
+                gap: 20px;
+                padding: 20px;
+            }
+
+            .info {
+                max-width: 100%;
+            }
+
+            .info img {
+                width: 100%;
+                max-width: 300px;
+                height: auto;
+            }
+
+            .book-form {
+                margin-left: 20px;
+                margin-right: 20px;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        </style>
 </head>
 <body>
 <?php include 'header.php';?>
 
-    <section id=infos class="first">
-            <div class="info">
-                <h2><?php echo htmlspecialchars($dest['DestinationName']); ?></h2>
-
-                <img src="<?php echo $imagePath . htmlspecialchars($dest['DestinationImage']); ?>" 
-                    alt="<?php echo htmlspecialchars($dest['DestinationName']); ?>" />
-
-                <p><?php echo nl2br($dest['DestinationInfo']); ?></p>
-
+<section id=infos class="first">
+    <div class="info">
+        <h2><?php echo htmlspecialchars($dest['DestinationName']); ?></h2>
+        
+        <img src="<?php echo $imagePath . htmlspecialchars($dest['DestinationImage']); ?>" 
+        alt="<?php echo htmlspecialchars($dest['DestinationName']); ?>" />
+        
+        <p><?php echo nl2br($dest['DestinationInfo']); ?></p>
+        
                 <?php if (!empty($dest['DestinationPlaces'])): ?>
                     <h3>Top Places to Visit:</h3>
-                    <ul>
+                    <ul style="list-style: disc; padding-left: 20px; margin-bottom: 5px;">
                         <?php $places = explode(',', $dest['DestinationPlaces']);
                         foreach ($places as $place): ?>
                             <li><?php echo htmlspecialchars(trim($place)); ?></li>
@@ -168,7 +201,7 @@ $imagePath = "uploads/";
         <div class="container book">
             <div class="second-head">
                 <h1>Book now!</h1>
-                <form id="book-form" class="book-form" action="book_form.php" method="post" >        
+                <form id="book-form" class="book-form" action="book_form.php?id=<?php echo $destinationId; ?>" method="post">       
                     <div class="form-row">
                         <input type="text" id="fname" name="ClientName" placeholder="First Name" required>
                         <input type="text" id="lname" name="ClientSurname" placeholder="Surname" required>
