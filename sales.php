@@ -13,14 +13,14 @@ $highestDestination = "N/A";
 $highestRevenue = 0;
 $avgRevenue = 0;
 
-$result = $conn->query("SELECT SUM(Revenue) AS TotalRevenue, AVG(Revenue) AS AvgRevenue FROM Destination");
+$result = $conn->query("SELECT SUM(Revenue) AS TotalRevenue, AVG(Revenue) AS AvgRevenue FROM destination");
 if ($row = $result->fetch_assoc()) {
     $totalRevenue = $row['TotalRevenue'] ?? 0;
     $avgRevenue = $row['AvgRevenue'] ?? 0;
 }
 
 // ✅ Highest revenue destination
-$result = $conn->query("SELECT DestinationName, Revenue FROM Destination ORDER BY Revenue DESC LIMIT 1");
+$result = $conn->query("SELECT DestinationName, Revenue FROM destination ORDER BY Revenue DESC LIMIT 1");
 if ($row = $result->fetch_assoc()) {
     $highestDestination = $row['DestinationName'];
     $highestRevenue = $row['Revenue'];
@@ -29,7 +29,7 @@ if ($row = $result->fetch_assoc()) {
 // ✅ Table data
 $tableData = $conn->query("
     SELECT DestinationName, DestinationPrice, Revenue, StartDate, EndDate, Type 
-    FROM Destination
+    FROM destination
     ORDER BY Revenue DESC
 ");
 ?>
