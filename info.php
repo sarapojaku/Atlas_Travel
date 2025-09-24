@@ -10,7 +10,7 @@ $destinationId = intval($_GET['id']);
 
 // Fetch all destinations
 $sql = "SELECT DestinationName, DestinationInfo, DestinationPlaces, DestinationImage, DestinationPrice, StartDate, EndDate
-        FROM Destination
+        FROM destination
         WHERE DestinationID = ?";
 $stmt = $conn->prepare($sql);
 $stmt->bind_param("i", $destinationId);
