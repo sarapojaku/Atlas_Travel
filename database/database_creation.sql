@@ -5,7 +5,7 @@ CREATE DATABASE IF NOT EXISTS `agencydb` DEFAULT CHARACTER SET utf8mb4 COLLATE u
 USE `agencydb`;
 
 -- Create Client table
-CREATE TABLE IF NOT EXISTS `Client` (
+CREATE TABLE IF NOT EXISTS `client` (
   `ClientID` INT AUTO_INCREMENT PRIMARY KEY,
   `ClientName` VARCHAR(50),
   `ClientSurname` VARCHAR(50),
@@ -18,18 +18,18 @@ CREATE TABLE IF NOT EXISTS `Client` (
   `Reviews` TEXT,
   `ProfileImage` VARCHAR(255),
   `Spending` INT,
-  `Rating`  INT
+  `Rating`  INT,
 );
 
 -- Create Country table
-CREATE TABLE IF NOT EXISTS `Country` (
+CREATE TABLE IF NOT EXISTS `country` (
   `CountryID` INT AUTO_INCREMENT PRIMARY KEY,
   `CountryName` VARCHAR(100),
   `CountryInfo` TEXT,
 );
 
 -- Create Destination table
-CREATE TABLE IF NOT EXISTS `Destination` (
+CREATE TABLE IF NOT EXISTS `destination` (
   `DestinationID` INT AUTO_INCREMENT PRIMARY KEY,
   `DestinationName` VARCHAR(100),
   `DestinationInfo` TEXT,
@@ -45,12 +45,17 @@ CREATE TABLE IF NOT EXISTS `Destination` (
 );
 
 -- Create Booking table
-CREATE TABLE IF NOT EXISTS `Booking` (
-  `BookingID` INT AUTO_INCREMENT PRIMARY KEY,
-  `ClientSpendings` DECIMAL(10, 2),
-  `Reviews` TEXT,
-  `ClientID` INT,
-  `DestinationID` INT,
-  FOREIGN KEY (`ClientID`) REFERENCES `Client`(`ClientID`),
-  FOREIGN KEY (`DestinationID`) REFERENCES `Destination`(`DestinationID`)
+CREATE TABLE `book_form` (
+    `BookingID` INT AUTO_INCREMENT PRIMARY KEY,
+    `ClientID` INT,
+    `ClientName` VARCHAR(50),
+    `ClientSurname` VARCHAR(50),
+    `DestinationID` INT,
+    `Email` VARCHAR(100),
+    `number` VARCHAR(20),
+    `exDate` VARCHAR(7),
+    `cvv` VARCHAR(4),
+    FOREIGN KEY (ClientID) REFERENCES client(ClientID),
+    FOREIGN KEY (DestinationID) REFERENCES destination(DestinationID)
 );
+
