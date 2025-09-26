@@ -1,5 +1,4 @@
 <?php 
-// session_start();
 include 'db_connect.php';
 
 if (!isset($_GET['id']) || !is_numeric($_GET['id'])) {
@@ -8,7 +7,7 @@ if (!isset($_GET['id']) || !is_numeric($_GET['id'])) {
 
 $destinationId = intval($_GET['id']);
 
-// Fetch all destinations
+// Fetch destination details
 $sql = "SELECT DestinationName, DestinationInfo, DestinationPlaces, DestinationImage, DestinationPrice, StartDate, EndDate
         FROM destination
         WHERE DestinationID = ?";
@@ -19,9 +18,7 @@ $result = $stmt->get_result();
 $dest = $result->fetch_assoc();
 
 $imagePath = "uploads/";
-
 ?>
-
 
 <!DOCTYPE html>
 <html lang="en">
@@ -65,7 +62,6 @@ $imagePath = "uploads/";
             border-radius: 10px;
             background: #ffffff;
             font-size: 15px;
-            /* margin-bottom: 10px; */
         }
         button {
             background: #625d5d;
@@ -78,7 +74,6 @@ $imagePath = "uploads/";
             transition: transform 0.3s ease, box-shadow 0.3s ease;   
         }
         button:hover {
-            text-decoration: none;
             background: #767778;
             transform: scale(1.05);
             box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
@@ -86,7 +81,6 @@ $imagePath = "uploads/";
         #book-response {
             padding: 10px;
             border-radius: 5px;
-            transition: opacity 0.5s ease;
         }
         .card input {
             margin-bottom: 10px;
@@ -143,84 +137,75 @@ $imagePath = "uploads/";
                 gap: 20px;
                 padding: 20px;
             }
-
             .info {
                 max-width: 100%;
             }
-
             .info img {
                 width: 100%;
                 max-width: 300px;
                 height: auto;
             }
-
             .book-form {
                 margin-left: 20px;
                 margin-right: 20px;
             }
-
             .form-row {
                 grid-template-columns: 1fr;
             }
         }
-
-        </style>
+    </style>
 </head>
 <body>
 <?php include 'header.php';?>
 
-<section id=infos class="first">
+<section id="infos" class="first">
     <div class="info">
         <h2><?php echo htmlspecialchars($dest['DestinationName']); ?></h2>
         
         <img src="<?php echo $imagePath . htmlspecialchars($dest['DestinationImage']); ?>" 
         alt="<?php echo htmlspecialchars($dest['DestinationName']); ?>" />
         
-        <p><?php echo nl2br($dest['DestinationInfo']); ?></p>
+        <p><?php echo nl2br(htmlspecialchars($dest['DestinationInfo'])); ?></p>
         
-                <?php if (!empty($dest['DestinationPlaces'])): ?>
-                    <h3>Top Places to Visit:</h3>
-                    <ul style="list-style: disc; padding-left: 20px; margin-bottom: 5px;">
-                        <?php $places = explode(',', $dest['DestinationPlaces']);
-                        foreach ($places as $place): ?>
-                            <li><?php echo htmlspecialchars(trim($place)); ?></li>
-                        <?php endforeach; ?>
-                    </ul>
-                <?php endif; ?>
+        <?php if (!empty($dest['DestinationPlaces'])): ?>
+            <h3>Top Places to Visit:</h3>
+            <ul style="list-style: disc; padding-left: 20px; margin-bottom: 5px;">
+                <?php $places = explode(',', $dest['DestinationPlaces']);
+                foreach ($places as $place): ?>
+                    <li><?php echo htmlspecialchars(trim($place)); ?></li>
+                <?php endforeach; ?>
+            </ul>
+        <?php endif; ?>
 
-                <ul>
-                    <li><span>Date: </span><?php echo date("d/m/Y", strtotime($dest['StartDate'])) . " - " . date("d/m/Y", strtotime($dest['EndDate'])); ?></li>
-                    <li><span>Price: €</span><?php echo htmlspecialchars($dest['DestinationPrice']); ?></li>
-                </ul>
+        <ul>
+            <li><span>Date: </span><?php echo date("d/m/Y", strtotime($dest['StartDate'])) . " - " . date("d/m/Y", strtotime($dest['EndDate'])); ?></li>
+            <li><span>Price: €</span><?php echo htmlspecialchars($dest['DestinationPrice']); ?></li>
+        </ul>
+    </div>
+</section>
 
-            </div>
-
-    </section>
-
-    <section id="booking" class="second">
-        <div class="container book">
-            <div class="second-head">
-                <h1>Book now!</h1>
-                <form id="book-form" class="book-form" action="book_form.php?id=<?php echo $destinationId; ?>" method="post" autocomplete="off">       
-                    <div class="form-row">
-                        <input type="text" name="ClientName" placeholder="First Name" required>
-                        <input type="text" name="ClientSurname" placeholder="Surname" required>
-                    </div>
-
-                    <input type="text" name="email" placeholder="Email" required>
-
-                    <div class="card">
-                        <h2>Card Details.</h2>
-                        <input type="text" id="number" name="number" placeholder="Card Number" required>
-                        <input type="month" id="exDate" name="exDate" placeholder="MM/YY" required>
-                        <input type="text" id="cvv" name="cvv" placeholder="CVV" required>
-                    </div>
-                    <button type="submit">Submit Payment.</button>
-                    <div id="book-response"></div>
-                </form>
-            </div>
+<section id="booking" class="second">
+    <div class="container book">
+        <div class="second-head">
+            <h1>Book now!</h1>
+            <form id="book-form" class="book-form" action="book_form.php?id=<?php echo $destinationId; ?>" method="post" autocomplete="off">       
+                <div class="form-row">
+                    <input type="text" name="ClientName" placeholder="First Name" required>
+                    <input type="text" name="ClientSurname" placeholder="Surname" required>
+                </div>
+                <input type="email" name="email" placeholder="Email" required>
+                <div class="card">
+                    <h2>Card Details.</h2>
+                    <input type="text" id="number" name="number" placeholder="Card Number" required>
+                    <input type="month" id="exDate" name="exDate" required>
+                    <input type="text" id="cvv" name="cvv" placeholder="CVV" required>
+                </div>
+                <button type="submit">Submit Payment.</button>
+                <div id="book-response"></div>
+            </form>
         </div>
-    </section>
+    </div>
+</section>
 
 <?php include 'footer.php';?>
 </body>

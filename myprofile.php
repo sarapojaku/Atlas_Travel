@@ -58,15 +58,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
-// Spending overview
-$spendingQuery = $conn->prepare("SELECT SUM(ClientSpendings) AS totalSpend, COUNT(*) AS totalBookings FROM Booking WHERE ClientID = ?");
+// Spending overview (SUM of destination prices for booked trips)
+$spendingQuery = $conn->prepare("
+    SELECT SUM(d.DestinationPrice) AS totalSpend, COUNT(b.BookingID) AS totalBookings
+    FROM Booking b
+    JOIN Destination d ON b.DestinationID = d.DestinationID
+    WHERE b.ClientID = ?
+");
 $spendingQuery->bind_param("i", $client['ClientID']);
 $spendingQuery->execute();
 $spending = $spendingQuery->get_result()->fetch_assoc();
 
 // Upcoming trips
 $upcomingQuery = $conn->prepare("
-    SELECT d.DestinationName, d.StartDate, d.EndDate, d.DestinationImage, b.ClientSpendings
+    SELECT d.DestinationName, d.StartDate, d.EndDate, d.DestinationImage, d.DestinationPrice
     FROM Booking b
     JOIN Destination d ON b.DestinationID = d.DestinationID
     WHERE b.ClientID = ? AND d.EndDate >= CURDATE()
@@ -78,7 +83,7 @@ $upcomingTrips = $upcomingQuery->get_result();
 
 // Past trips
 $pastQuery = $conn->prepare("
-    SELECT d.DestinationName, d.StartDate, d.EndDate, d.DestinationImage, b.ClientSpendings, b.Reviews
+    SELECT d.DestinationName, d.StartDate, d.EndDate, d.DestinationImage, d.DestinationPrice
     FROM Booking b
     JOIN Destination d ON b.DestinationID = d.DestinationID
     WHERE b.ClientID = ? AND d.EndDate < CURDATE()
@@ -87,7 +92,6 @@ $pastQuery = $conn->prepare("
 $pastQuery->bind_param("i", $client['ClientID']);
 $pastQuery->execute();
 $pastTrips = $pastQuery->get_result();
-
 ?>
 
 <!DOCTYPE html>
@@ -100,11 +104,7 @@ $pastTrips = $pastQuery->get_result();
   <link rel="shortcut icon" href="images/logo.png" type="image/png" />
   <style>
 /* Reset & base */
-    * { 
-        box-sizing: border-box; 
-        margin: 0; 
-        padding: 0; 
-    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
     :root {
         --bg: #625d5d;
         --fg: #000000;
@@ -122,20 +122,9 @@ $pastTrips = $pastQuery->get_result();
         color: var(--fg);
         line-height: 1.6;
     }
-    a { 
-        color: inherit; 
-        text-decoration: none; 
-    }
-    img { 
-        display: block; 
-        max-width: 100%; 
-        height: auto; 
-    }
-    .container { 
-        max-width: 1100px; 
-        padding: 0 1rem; 
-        margin: 0 auto; 
-    }
+    a { color: inherit; text-decoration: none; }
+    img { display: block; max-width: 100%; height: auto; }
+    .container { max-width: 1100px; padding: 0 1rem; margin: 0 auto; }
     /* Navbar */
     .navbar {
         color: #ffffff;
@@ -145,49 +134,16 @@ $pastTrips = $pastQuery->get_result();
         backdrop-filter: blur(8px);
         border-bottom: 1px solid var(--border); 
     }
-    .nav-inner { 
-        height: 64px; 
-        display: flex; 
-        align-items: center; 
-        justify-content: space-between; 
-    }
-    .logo { 
-        display: flex; 
-        align-items: center; 
-        gap: 0.5rem; 
-        font-weight: 900; 
-        letter-spacing: 0.2px; 
-    }
-    .logo-icon { 
-        width: 32px; 
-        height: 32px; 
-        display: grid; 
-        place-items: center;
-    }
-    .nav-links { 
-        display: flex; 
-        align-items: center; 
-        gap: 10px; 
-    }
-    .nav-links > a { 
-        font-weight: bold; 
-        color: #ffffff; 
-        cursor: pointer;
-    }
-    .nav-links > a:hover{
-        text-decoration: underline; 
-    }
-    .sep { 
-        color: #ffffff; 
-    }
+    .nav-inner { height: 64px; display: flex; align-items: center; justify-content: space-between; }
+    .logo { display: flex; align-items: center; gap: 0.5rem; font-weight: 900; letter-spacing: 0.2px; }
+    .logo-icon { width: 32px; height: 32px; display: grid; place-items: center; }
+    .nav-links { display: flex; align-items: center; gap: 10px; }
+    .nav-links > a { font-weight: bold; color: #ffffff; cursor: pointer; }
+    .nav-links > a:hover { text-decoration: underline; }
+    .sep { color: #ffffff; }
     /* Profile layout */
-    .section { 
-        margin: 2rem auto; 
-    }
-    .section h2 { 
-        margin-bottom: 1rem; 
-        color: var(--bg); 
-    }
+    .section { margin: 2rem auto; }
+    .section h2 { margin-bottom: 1rem; color: var(--bg); }
     .card {
         background: var(--card);
         border-radius: var(--radius);
@@ -195,72 +151,23 @@ $pastTrips = $pastQuery->get_result();
         padding: 1.5rem;
         margin-bottom: 2rem;
     }
-    .profile-info {
-        display: flex; 
-        gap: 2rem; 
-        align-items: center;
-    }
+    .profile-info { display: flex; gap: 2rem; align-items: center; }
     .profile-info img {
-        width: 120px; 
-        height: 120px; 
-        border-radius: 50%; 
-        object-fit: cover;
+        width: 120px; height: 120px; border-radius: 50%; object-fit: cover;
         border: 3px solid var(--primary);
     }
-    .profile-info form {
-        margin-top: 1rem;
-    }
     .profile-info button {
-        margin-top: 0.5rem;
-        padding: 0.5rem 1rem;
-        border: none;
-        border-radius: 8px;
-        cursor: pointer;
-        background: var(--primary);
-        color: #fff;
+        margin-top: 0.5rem; padding: 0.5rem 1rem; border: none;
+        border-radius: 8px; cursor: pointer; background: var(--primary); color: #fff;
     }
-    .stats { 
-        display: flex; 
-        gap: 2rem; 
-    }
-    .stat { 
-        background: var(--primary-10); 
-        padding: 1rem; 
-        border-radius: var(--radius); 
-        text-align: center; 
-        flex: 1; 
-    }
-    .stat h3 { 
-        margin: 0; 
-        color: var(--primary); 
-    }
-    .trip-grid {
-        display: grid; 
-        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-        gap: 1.5rem;
-    }
-    .trip-card {
-        background: var(--card);
-        border-radius: var(--radius);
-        box-shadow: var(--shadow);
-        overflow: hidden;
-    }
-    .trip-card img { 
-        width: 100%; 
-        height: 160px; 
-        object-fit: cover; 
-    }
-    .trip-card-body { 
-        padding: 1rem; 
-    }
-    .trip-card-body h3 { 
-        margin-bottom: .5rem; 
-    }
-    .review { 
-        font-style: italic; 
-        color: var(--muted); 
-        margin-top: .5rem; 
-    }
+    .stats { display: flex; gap: 2rem; }
+    .stat { background: var(--primary-10); padding: 1rem; border-radius: var(--radius); text-align: center; flex: 1; }
+    .stat h3 { margin: 0; color: var(--primary); }
+    .trip-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; }
+    .trip-card { background: var(--card); border-radius: var(--radius); box-shadow: var(--shadow); overflow: hidden; }
+    .trip-card img { width: 100%; height: 160px; object-fit: cover; }
+    .trip-card-body { padding: 1rem; }
+    .trip-card-body h3 { margin-bottom: .5rem; }
   </style>
 </head>
 <body>
@@ -331,7 +238,7 @@ $pastTrips = $pastQuery->get_result();
             <div class="trip-card-body">
               <h3><?= htmlspecialchars($trip['DestinationName']) ?></h3>
               <p><?= htmlspecialchars($trip['StartDate']) ?> → <?= htmlspecialchars($trip['EndDate']) ?></p>
-              <p><strong>Paid:</strong> $<?= number_format($trip['ClientSpendings'], 2) ?></p>
+              <p><strong>Paid:</strong> $<?= number_format($trip['DestinationPrice'], 2) ?></p>
             </div>
           </div>
         <?php endwhile; ?>
@@ -352,10 +259,7 @@ $pastTrips = $pastQuery->get_result();
             <div class="trip-card-body">
               <h3><?= htmlspecialchars($trip['DestinationName']) ?></h3>
               <p><?= htmlspecialchars($trip['StartDate']) ?> → <?= htmlspecialchars($trip['EndDate']) ?></p>
-              <p><strong>Paid:</strong> $<?= number_format($trip['ClientSpendings'], 2) ?></p>
-              <?php if (!empty($trip['Reviews'])): ?>
-                <p class="review">“<?= htmlspecialchars($trip['Reviews']) ?>”</p>
-              <?php endif; ?>
+              <p><strong>Paid:</strong> $<?= number_format($trip['DestinationPrice'], 2) ?></p>
             </div>
           </div>
         <?php endwhile; ?>

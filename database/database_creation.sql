@@ -57,8 +57,6 @@ CREATE TABLE IF NOT EXISTS `destination` (
 
 CREATE TABLE IF NOT EXISTS `booking` (
   `BookingID` INT AUTO_INCREMENT PRIMARY KEY,
-  `Spendings` DECIMAL(10, 2),
-  `Revenue` DECIMAL(10, 2),
   `ClientID` INT,
   `DestinationID` INT,
   FOREIGN KEY (`ClientID`) REFERENCES `client`(`ClientID`),

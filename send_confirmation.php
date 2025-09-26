@@ -2,18 +2,11 @@
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 
-require 'vendor/autoload.php'; // Make sure PHPMailer is installed via Composer
+require 'vendor/autoload.php'; // Ensure PHPMailer is installed via Composer
 
 /**
  * Send booking confirmation email to client
  * Also notifies admin of the new booking
- *
- * @param string $ClientName
- * @param string $ClientSurname
- * @param string $email - client's email
- * @param float $DestinationID
- * @param float  $price - booking price
- * @return string status message
  */
 function sendConfirmationEmail($ClientName, $ClientSurname, $email, $DestinationID, $price) {
     $status = '';
@@ -24,7 +17,7 @@ function sendConfirmationEmail($ClientName, $ClientSurname, $email, $Destination
         $mail->Host       = 'smtp.gmail.com';
         $mail->SMTPAuth   = true;
         $mail->Username   = 'travelatlas24@gmail.com';
-        $mail->Password   = 'vupphjsnmwupiuvd';
+        $mail->Password   = 'vupphjsnmwupiuvd'; // Use App Password
         $mail->SMTPSecure = 'tls';
         $mail->Port       = 587;
 
@@ -60,7 +53,7 @@ function sendConfirmationEmail($ClientName, $ClientSurname, $email, $Destination
         $adminMail->Port       = 587;
 
         $adminMail->setFrom('travelatlas24@gmail.com', 'Travel Atlas');
-        $adminMail->addAddress('travelatlas24@gmail.com', 'Admin'); // Admin email
+        $adminMail->addAddress('travelatlas24@gmail.com', 'Admin'); 
 
         $adminMail->isHTML(true);
         $adminMail->Subject = "New Booking: {$ClientName} {$ClientSurname}";
@@ -68,7 +61,7 @@ function sendConfirmationEmail($ClientName, $ClientSurname, $email, $Destination
             <h2>New Booking Notification</h2>
             <p>Client: <strong>{$ClientName} {$ClientSurname}</strong></p>
             <p>Email: <strong>{$email}</strong></p>
-            <p>Destination: <strong>{$DestinationID}</strong></p>
+            <p>Destination ID: <strong>{$DestinationID}</strong></p>
             <p>Total Price: <strong>€{$price}</strong></p>
         ";
         $adminMail->AltBody = "Client: {$ClientName} {$ClientSurname}\n

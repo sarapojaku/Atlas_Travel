@@ -39,20 +39,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     $price = $dest['DestinationPrice'];
 
-    $stmt = $conn->prepare(
-    "INSERT INTO booking (BookingID, ClientID, DestinationID) 
-    VALUES (?, ?, ?)"
-);
-
-// Bind 8 variables
-$stmt->bind_param(
-    "iii",
-    $BookingID,
-    $ClientID,
-    $DestinationID,
-);
-
-$stmt->execute();
+    // 3. Insert booking (BookingID auto-increment → no need to pass it)
+    $stmt = $conn->prepare("INSERT INTO booking (ClientID, DestinationID) VALUES (?, ?)");
+    $stmt->bind_param("ii", $ClientID, $DestinationID);
+    $stmt->execute();
 
     // 4. Update client spending
     $stmt = $conn->prepare("UPDATE client SET Spending = Spending + ? WHERE ClientID=?");
@@ -67,10 +57,8 @@ $stmt->execute();
     // 6. Send confirmation email
     $emailStatus = sendConfirmationEmail($ClientName, $ClientSurname, $email, $DestinationID, $price);
 
-    // include 'send_confirmation.php';
-
-    // 7. Redirect to prevent form resubmission
-    header("Location: booking.php?dest=$DestinationID&status=success");
+    // 7. Redirect to prevent resubmission
+    header("Location: booking.php?id=$DestinationID&status=success");
     exit;
 }
 ?>
