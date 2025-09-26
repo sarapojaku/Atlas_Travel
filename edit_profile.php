@@ -146,27 +146,42 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
       border-radius: 6px;
     }
     /* Change password line */
-    .change-password {
+    .change-password,
+    .delete-profile {
       grid-column: span 2;
       display: flex;
       align-items: center;
       justify-content: center;
       gap: 10px;
-      margin-top: 1rem;
       font-weight: bold;
       color: #000;
+    }
+    .change-password{
+      margin-top: 15px;
     }
     .change-password a {
       padding: 6px 12px;
       background: #2563eb;
       color: #fff;
-      border-radius: 20px;
+      border-radius: 6px;
       text-decoration: none;
       font-size: 14px;
       font-weight: lighter;
     }
     .change-password a:hover {
       background: #1d4ed8;
+    }
+    .delete-profile a {
+      padding: 6px 12px;
+      background: #c40202ff;
+      color: #fff;
+      border-radius: 6px;
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: lighter;
+    }
+    .delete-profile a:hover {
+      background: #8a0000ff;
     }
     /* Save button */
     .save-btn {
@@ -236,6 +251,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <div class="change-password">
           <span>Do you want to change your password?</span>
           <a href="changePassword.php" class="change-btn">Change Password</a>
+        </div>
+
+        <div class="delete-profile">
+          <span>Do you want to delete your profile?</span>
+          <a href="deleteProfile.php" class="delete-btn">Delete my profile</a>
         </div>
         <button type="submit" class="save-btn">Save Changes</button>
       </div>
