@@ -60,32 +60,3 @@ if (contactForm && contactResponse) {
   });
 }
 
-// //Booking Form
-// const bookingForm = document.getElementById("book-form");
-// const bookingResponse = document.getElementById("book-response");
-
-// if (bookingForm && bookingResponse) {
-//   bookingForm.addEventListener("submit", async (e) => {
-//     e.preventDefault();
-
-//     bookingResponse.textContent = "Sending...";
-//     bookingResponse.style.color = "blue";
-
-//     const formData = new FormData(bookingForm);
-//     try {
-//       const response = await fetch(bookingForm.action, {
-//         method: "POST",
-//         body: formData,
-//       });
-
-//       const data = await response.json();
-//       bookingResponse.textContent = data.message;
-//       bookingResponse.style.color = data.status === "success" ? "green" : "red";
-
-//       if (data.status === "success") bookingForm.reset();
-//     } catch (error) {
-//       bookingResponse.textContent = "An error occurred. Please try again.";
-//       bookingResponse.style.color = "red";
-//     }
-//   });
-// }
