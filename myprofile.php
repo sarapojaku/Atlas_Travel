@@ -1,4 +1,4 @@
-<?php  
+<?php   
 session_start();
 include 'db_connect.php';
 
@@ -166,8 +166,34 @@ $pastTrips = $pastQuery->get_result();
     .trip-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; }
     .trip-card { background: var(--card); border-radius: var(--radius); box-shadow: var(--shadow); overflow: hidden; }
     .trip-card img { width: 100%; height: 160px; object-fit: cover; }
-    .trip-card-body { padding: 1rem; }
+    .trip-card-body-wrapper {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        padding: 1rem;
+        flex-wrap: wrap;
+        gap: 1rem;
+    }
+    .trip-card-body { flex: 1 1 70%; }
     .trip-card-body h3 { margin-bottom: .5rem; }
+    .cancel-btn {
+        padding: 0.5rem 1rem;
+        background: #ef4444;
+        color: #fff;
+        border-radius: 8px;
+        text-decoration: none;
+        font-weight: bold;
+        white-space: nowrap;
+        flex-shrink: 0;
+        height: fit-content;
+        margin-top: 20px;
+    }
+    .cancel-btn:hover { background: #dc2626; }
+    @media (max-width: 600px) {
+        .trip-card-body-wrapper { flex-direction: column; }
+        .trip-card-body { flex: 1 1 100%; }
+        .cancel-btn { align-self: flex-start; }
+    }
   </style>
 </head>
 <body>
@@ -241,10 +267,13 @@ $pastTrips = $pastQuery->get_result();
           ?>
           <div class="trip-card">
             <img src="<?= htmlspecialchars($imgPath) ?>" alt="<?= htmlspecialchars($trip['DestinationName']) ?>">
-            <div class="trip-card-body">
-              <h3><?= htmlspecialchars($trip['DestinationName']) ?></h3>
-              <p><?= htmlspecialchars($trip['StartDate']) ?> → <?= htmlspecialchars($trip['EndDate']) ?></p>
-              <p><strong>Paid:</strong> $<?= number_format($trip['DestinationPrice'], 2) ?></p>
+            <div class="trip-card-body-wrapper">
+                <div class="trip-card-body">
+                    <h3><?= htmlspecialchars($trip['DestinationName']) ?></h3>
+                    <p><?= htmlspecialchars($trip['StartDate']) ?> → <?= htmlspecialchars($trip['EndDate']) ?></p>
+                    <p><strong>Paid:</strong> $<?= number_format($trip['DestinationPrice'], 2) ?></p>
+                </div>
+                <a href="cancelBooking.php" class="cancel-btn">Cancel</a>
             </div>
           </div>
         <?php endwhile; ?>
@@ -268,10 +297,12 @@ $pastTrips = $pastQuery->get_result();
           ?>
           <div class="trip-card">
             <img src="<?= htmlspecialchars($imgPath) ?>" alt="<?= htmlspecialchars($trip['DestinationName']) ?>">
-            <div class="trip-card-body">
-              <h3><?= htmlspecialchars($trip['DestinationName']) ?></h3>
-              <p><?= htmlspecialchars($trip['StartDate']) ?> → <?= htmlspecialchars($trip['EndDate']) ?></p>
-              <p><strong>Paid:</strong> $<?= number_format($trip['DestinationPrice'], 2) ?></p>
+            <div class="trip-card-body-wrapper">
+                <div class="trip-card-body">
+                    <h3><?= htmlspecialchars($trip['DestinationName']) ?></h3>
+                    <p><?= htmlspecialchars($trip['StartDate']) ?> → <?= htmlspecialchars($trip['EndDate']) ?></p>
+                    <p><strong>Paid:</strong> $<?= number_format($trip['DestinationPrice'], 2) ?></p>
+                </div>
             </div>
           </div>
         <?php endwhile; ?>
