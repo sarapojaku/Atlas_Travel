@@ -10,7 +10,7 @@ if ($page < 1) $page = 1;
 $offset = ($page - 1) * $limit;
 
 // Fetch countries for sidebar
-$countrySql = "SELECT CountryID, CountryName FROM Country ORDER BY CountryName ASC";
+$countrySql = "SELECT CountryID, CountryName FROM country ORDER BY CountryName ASC";
 $countryResult = $conn->query($countrySql);
 $countries = [];
 if ($countryResult && $countryResult->num_rows > 0) {
@@ -23,8 +23,8 @@ if ($countryResult && $countryResult->num_rows > 0) {
 if ($selectedCountry) {
     $sql = "SELECT d.DestinationID, d.DestinationName, d.DestinationImage, d.DestinationPrice, 
                    d.StartDate, d.EndDate, c.CountryName
-            FROM Destination d
-            JOIN Country c ON d.CountryID = c.CountryID
+            FROM destination d
+            JOIN country c ON d.CountryID = c.CountryID
             WHERE c.CountryID = ?
             LIMIT ? OFFSET ?";
     $stmt = $conn->prepare($sql);
@@ -33,7 +33,7 @@ if ($selectedCountry) {
     $result = $stmt->get_result();
 
     // Count total for pagination
-    $countSql = "SELECT COUNT(*) AS total FROM Destination WHERE CountryID = ?";
+    $countSql = "SELECT COUNT(*) AS total FROM destination WHERE CountryID = ?";
     $countStmt = $conn->prepare($countSql);
     $countStmt->bind_param("i", $selectedCountry);
     $countStmt->execute();
@@ -41,8 +41,8 @@ if ($selectedCountry) {
 } else {
     $sql = "SELECT d.DestinationID, d.DestinationName, d.DestinationImage, d.DestinationPrice, 
                    d.StartDate, d.EndDate, c.CountryName
-            FROM Destination d
-            JOIN Country c ON d.CountryID = c.CountryID
+            FROM destination d
+            JOIN country c ON d.CountryID = c.CountryID
             LIMIT ? OFFSET ?";
     $stmt = $conn->prepare($sql);
     $stmt->bind_param("ii", $limit, $offset);
@@ -50,7 +50,7 @@ if ($selectedCountry) {
     $result = $stmt->get_result();
 
     // Count total for pagination
-    $countSql = "SELECT COUNT(*) AS total FROM Destination";
+    $countSql = "SELECT COUNT(*) AS total FROM destination";
     $total = $conn->query($countSql)->fetch_assoc()['total'];
 }
 
@@ -114,61 +114,46 @@ $imagePath = "uploads/";
         flex: 1;
         padding: 20px;
     }
-    /* .destination-card {
-        border: 1px solid #ddd;
-        padding: 10px;
-        margin: 10px 0;
-        border-radius: 6px;
+    .destinations {
+        margin-bottom: 20px;
+    }
+    .destination-card {
         display: flex;
-        gap: 10px;
-        align-items: center;
+        align-items: center; /* Vertically center items */
+        justify-content: space-between;
+        border: 1px solid #ddd;
+        padding: 15px;
+        margin: 10px 0;
+        border-radius: 10px;
+        box-shadow: 0 2px 6px rgba(0,0,0,0.1);
     }
     .destination-card img {
-        width: 120px;
-        height: 80px;
+        width: 150px;
+        height: 100px;
         object-fit: cover;
+        border-radius: 8px;
+        margin-right: 15px;
+    }
+    .card-content {
+        flex: 1;
+    }
+    .card-action {
+        margin-left: 20px;
+        display: flex;
+        align-items: center; /* Middle-right alignment */
+    }
+    .learn-more {
+        display: inline-block;
+        padding: 8px 12px;
+        background: #625d5d;
+        color: #fff;
         border-radius: 6px;
-    } */
-        .destinations {
-            margin-bottom: 20px;
-        }
-        .destination-card {
-            display: flex;
-            align-items: center; /* Vertically center items */
-            justify-content: space-between;
-            border: 1px solid #ddd;
-            padding: 15px;
-            margin: 10px 0;
-            border-radius: 10px;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-        }
-        .destination-card img {
-            width: 150px;
-            height: 100px;
-            object-fit: cover;
-            border-radius: 8px;
-            margin-right: 15px;
-        }
-        .card-content {
-            flex: 1;
-        }
-        .card-action {
-            margin-left: 20px;
-            display: flex;
-            align-items: center; /* Middle-right alignment */
-        }
-        .learn-more {
-            display: inline-block;
-            padding: 8px 12px;
-            background: #625d5d;
-            color: #fff;
-            border-radius: 6px;
-            text-decoration: none;
-            transition: background 0.3s ease;
-        }
-        .learn-more:hover {
-            background: #767778;
-        }
+        text-decoration: none;
+        transition: background 0.3s ease;
+    }
+    .learn-more:hover {
+        background: #767778;
+    }
     .pagination {
         margin-top: 20px;
     }
