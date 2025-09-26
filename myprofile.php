@@ -141,6 +141,8 @@ $pastTrips = $pastQuery->get_result();
         flex-shrink: 0;
         height: fit-content;
         cursor: pointer;
+        border: none;
+        margin-top: 20px;
     }
     .cancel-btn:hover { background: #dc2626; }
     @media (max-width: 600px) {
