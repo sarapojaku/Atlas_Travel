@@ -117,7 +117,8 @@ button {
     display: block; 
     margin: 1rem auto; 
 }
-.password-status, .confirm-status { 
+.password-status, 
+.confirm-status { 
     font-size: 0.9rem; 
     margin-top: -5px; 
     margin-bottom: 10px; 
