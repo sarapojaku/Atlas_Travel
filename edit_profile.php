@@ -255,7 +255,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         <div class="delete-profile">
           <span>Do you want to delete your profile?</span>
-          <a href="deleteProfile.php" class="delete-btn">Delete my profile</a>
+          <a href="deleteProfile.php" class="delete-btn">Delete My Account</a>
         </div>
         <button type="submit" class="save-btn">Save Changes</button>
       </div>
