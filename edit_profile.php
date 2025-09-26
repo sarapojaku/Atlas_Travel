@@ -11,7 +11,7 @@ if (!isset($_SESSION['username'])) {
 $username = $_SESSION['username'];
 
 // Fetch client details
-$stmt = $conn->prepare("SELECT * FROM Client WHERE Username = ?");
+$stmt = $conn->prepare("SELECT * FROM client WHERE Username = ?");
 $stmt->bind_param("s", $username);
 $stmt->execute();
 $client = $stmt->get_result()->fetch_assoc();
@@ -23,7 +23,7 @@ $defaultImage = "images/default-profile.png";
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Remove picture → reset to default
     if (isset($_POST['removeImage'])) {
-        $stmt = $conn->prepare("UPDATE Client SET ProfileImage=? WHERE ClientID=?");
+        $stmt = $conn->prepare("UPDATE client SET ProfileImage=? WHERE ClientID=?");
         $stmt->bind_param("si", $defaultImage, $client['ClientID']);
         $stmt->execute();
         header("Location: edit_profile.php");
