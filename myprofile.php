@@ -61,8 +61,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 // Spending overview (SUM of destination prices for booked trips)
 $spendingQuery = $conn->prepare("
     SELECT SUM(d.DestinationPrice) AS totalSpend, COUNT(b.BookingID) AS totalBookings
-    FROM Booking b
-    JOIN Destination d ON b.DestinationID = d.DestinationID
+    FROM booking b
+    JOIN destination d ON b.DestinationID = d.DestinationID
     WHERE b.ClientID = ?
 ");
 $spendingQuery->bind_param("i", $client['ClientID']);
@@ -72,8 +72,8 @@ $spending = $spendingQuery->get_result()->fetch_assoc();
 // Upcoming trips
 $upcomingQuery = $conn->prepare("
     SELECT d.DestinationName, d.StartDate, d.EndDate, d.DestinationImage, d.DestinationPrice
-    FROM Booking b
-    JOIN Destination d ON b.DestinationID = d.DestinationID
+    FROM booking b
+    JOIN destination d ON b.DestinationID = d.DestinationID
     WHERE b.ClientID = ? AND d.EndDate >= CURDATE()
     ORDER BY d.StartDate ASC
 ");
@@ -84,8 +84,8 @@ $upcomingTrips = $upcomingQuery->get_result();
 // Past trips
 $pastQuery = $conn->prepare("
     SELECT d.DestinationName, d.StartDate, d.EndDate, d.DestinationImage, d.DestinationPrice
-    FROM Booking b
-    JOIN Destination d ON b.DestinationID = d.DestinationID
+    FROM booking b
+    JOIN destination d ON b.DestinationID = d.DestinationID
     WHERE b.ClientID = ? AND d.EndDate < CURDATE()
     ORDER BY d.EndDate DESC
 ");
