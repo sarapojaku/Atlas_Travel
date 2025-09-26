@@ -3,7 +3,7 @@ include 'db_connect.php';
 
 // Fetch all destinations 
 $sql = "SELECT DestinationID, DestinationName, DestinationImage, DestinationPrice, StartDate, EndDate 
-        FROM Destination 
+        FROM destination 
         ORDER BY RAND()
         LIMIT 10"; 
 $result = $conn->query($sql);
