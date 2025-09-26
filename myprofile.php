@@ -16,48 +16,6 @@ $stmt->bind_param("s", $username);
 $stmt->execute();
 $client = $stmt->get_result()->fetch_assoc();
 
-// --- Handle Profile Image Upload/Remove ---
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    // Upload new image
-    if (isset($_POST['uploadImage']) && isset($_FILES['profileImage']) && $_FILES['profileImage']['error'] === UPLOAD_ERR_OK) {
-        $uploadDir = "uploads/";
-        if (!is_dir($uploadDir)) mkdir($uploadDir, 0777, true);
-
-        $ext = strtolower(pathinfo($_FILES['profileImage']['name'], PATHINFO_EXTENSION));
-        $allowed = ["jpg", "jpeg", "png", "gif"];
-
-        if (in_array($ext, $allowed) && $_FILES['profileImage']['size'] <= 2 * 1024 * 1024) {
-            $fileName = "profile_" . $client['ClientID'] . "." . $ext;
-            $filePath = $uploadDir . $fileName;
-
-            // Delete old file if exists
-            if ($client['ProfileImage'] && file_exists($client['ProfileImage'])) {
-                unlink($client['ProfileImage']);
-            }
-
-            if (move_uploaded_file($_FILES['profileImage']['tmp_name'], $filePath)) {
-                $update = $conn->prepare("UPDATE Client SET ProfileImage = ? WHERE ClientID = ?");
-                $update->bind_param("si", $filePath, $client['ClientID']);
-                $update->execute();
-                header("Location: myprofile.php");
-                exit;
-            }
-        }
-    }
-
-    // Remove existing image
-    if (isset($_POST['removeImage'])) {
-        if ($client['ProfileImage'] && file_exists($client['ProfileImage'])) {
-            unlink($client['ProfileImage']);
-        }
-        $update = $conn->prepare("UPDATE Client SET ProfileImage = NULL WHERE ClientID = ?");
-        $update->bind_param("i", $client['ClientID']);
-        $update->execute();
-        header("Location: myprofile.php");
-        exit;
-    }
-}
-
 // Spending overview (SUM of destination prices for booked trips)
 $spendingQuery = $conn->prepare("
     SELECT SUM(d.DestinationPrice) AS totalSpend, COUNT(b.BookingID) AS totalBookings
@@ -71,7 +29,7 @@ $spending = $spendingQuery->get_result()->fetch_assoc();
 
 // Upcoming trips
 $upcomingQuery = $conn->prepare("
-    SELECT d.DestinationName, d.StartDate, d.EndDate, d.DestinationImage, d.DestinationPrice
+    SELECT b.BookingID, d.DestinationName, d.StartDate, d.EndDate, d.DestinationImage, d.DestinationPrice
     FROM booking b
     JOIN destination d ON b.DestinationID = d.DestinationID
     WHERE b.ClientID = ? AND d.EndDate >= CURDATE()
@@ -103,7 +61,7 @@ $pastTrips = $pastQuery->get_result();
   <link rel="icon" href="images/logo.png" type="image/png" />
   <link rel="shortcut icon" href="images/logo.png" type="image/png" />
   <style>
-/* Reset & base */
+    /* Reset & base */
     * { box-sizing: border-box; margin: 0; padding: 0; }
     :root {
         --bg: #625d5d;
@@ -125,7 +83,6 @@ $pastTrips = $pastQuery->get_result();
     a { color: inherit; text-decoration: none; }
     img { display: block; max-width: 100%; height: auto; }
     .container { max-width: 1100px; padding: 0 1rem; margin: 0 auto; }
-    /* Navbar */
     .navbar {
         color: #ffffff;
         position: sticky;
@@ -141,7 +98,7 @@ $pastTrips = $pastQuery->get_result();
     .nav-links > a { font-weight: bold; color: #ffffff; cursor: pointer; }
     .nav-links > a:hover { text-decoration: underline; }
     .sep { color: #ffffff; }
-    /* Profile layout */
+
     .section { margin: 2rem auto; }
     .section h2 { margin-bottom: 1rem; color: var(--bg); }
     .card {
@@ -156,13 +113,10 @@ $pastTrips = $pastQuery->get_result();
         width: 120px; height: 120px; border-radius: 50%; object-fit: cover;
         border: 3px solid var(--primary);
     }
-    .profile-info button {
-        margin-top: 0.5rem; padding: 0.5rem 1rem; border: none;
-        border-radius: 8px; cursor: pointer; background: var(--primary); color: #fff;
-    }
     .stats { display: flex; gap: 2rem; }
     .stat { background: var(--primary-10); padding: 1rem; border-radius: var(--radius); text-align: center; flex: 1; }
     .stat h3 { margin: 0; color: var(--primary); }
+
     .trip-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; }
     .trip-card { background: var(--card); border-radius: var(--radius); box-shadow: var(--shadow); overflow: hidden; }
     .trip-card img { width: 100%; height: 160px; object-fit: cover; }
@@ -186,7 +140,7 @@ $pastTrips = $pastQuery->get_result();
         white-space: nowrap;
         flex-shrink: 0;
         height: fit-content;
-        margin-top: 20px;
+        cursor: pointer;
     }
     .cancel-btn:hover { background: #dc2626; }
     @media (max-width: 600px) {
@@ -195,6 +149,23 @@ $pastTrips = $pastQuery->get_result();
         .cancel-btn { align-self: flex-start; }
     }
   </style>
+  <script>
+    function cancelBooking(bookingID, el) {
+        if(!confirm("Are you sure you want to cancel this trip?")) return;
+        var xhr = new XMLHttpRequest();
+        xhr.open("POST", "cancelBooking.php", true);
+        xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+        xhr.onload = function() {
+            if (xhr.status === 200) {
+                // Remove the trip card from the DOM
+                el.closest('.trip-card').remove();
+            } else {
+                alert("Failed to cancel booking.");
+            }
+        };
+        xhr.send("bookingID=" + bookingID);
+    }
+  </script>
 </head>
 <body>
 <header class="navbar">
@@ -221,8 +192,6 @@ $pastTrips = $pastQuery->get_result();
       <p><strong>Email:</strong> <?= htmlspecialchars($client['Email']) ?></p>
       <p><strong>Phone:</strong> <?= htmlspecialchars($client['Phone']) ?></p>
       <p><strong>Gender:</strong> <?= htmlspecialchars($client['Gender']) ?></p>
-
-      <!-- New Edit Profile Button -->
       <p style="margin-top: 1rem;">
         <a href="edit_profile.php" style="
           display:inline-block;
@@ -238,8 +207,8 @@ $pastTrips = $pastQuery->get_result();
   </div>
 </section>
 
-  <!-- Spending Overview -->
-  <section class="section">
+<!-- Spending Overview -->
+<section class="section">
     <h2>Spending Overview</h2>
     <div class="stats">
       <div class="stat">
@@ -251,10 +220,10 @@ $pastTrips = $pastQuery->get_result();
         <p>Total Trips</p>
       </div>
     </div>
-  </section>
+</section>
 
-  <!-- Upcoming Trips -->
-  <section class="section">
+<!-- Upcoming Trips -->
+<section class="section">
     <h2>Upcoming Trips</h2>
     <div class="trip-grid">
       <?php if ($upcomingTrips->num_rows > 0): ?>
@@ -273,7 +242,7 @@ $pastTrips = $pastQuery->get_result();
                     <p><?= htmlspecialchars($trip['StartDate']) ?> → <?= htmlspecialchars($trip['EndDate']) ?></p>
                     <p><strong>Paid:</strong> $<?= number_format($trip['DestinationPrice'], 2) ?></p>
                 </div>
-                <a href="cancelBooking.php" class="cancel-btn">Cancel</a>
+                <button class="cancel-btn" onclick="cancelBooking(<?= $trip['BookingID'] ?>, this)">Cancel</button>
             </div>
           </div>
         <?php endwhile; ?>
@@ -281,10 +250,10 @@ $pastTrips = $pastQuery->get_result();
         <p>No upcoming trips.</p>
       <?php endif; ?>
     </div>
-  </section>
+</section>
 
-  <!-- Past Trips -->
-  <section class="section">
+<!-- Past Trips -->
+<section class="section">
     <h2>Past Trips</h2>
     <div class="trip-grid">
       <?php if ($pastTrips->num_rows > 0): ?>
@@ -310,10 +279,9 @@ $pastTrips = $pastQuery->get_result();
         <p>No past trips yet.</p>
       <?php endif; ?>
     </div>
-  </section>
+</section>
 </main>
 
-<!-- Footer Section -->
 <?php include 'footer.php';?> 
 
 </body>
