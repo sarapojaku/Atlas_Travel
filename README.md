@@ -136,7 +136,8 @@ Admin can manage all users, staff, destinations, and bookings.
 Client dashboard is fully interactive and showcases spending and trips history.
 
 ## 🛠 Roadmap / To-Do
-- Add booking cancellation feature  
+- Fix booking canellation button so it deletes the booking from spendings and revenue colons too
+- Add a secelt button at booking so clients can pick the flying company 
 - Send an email bill to clients whenever they make a booking  
 - Improve mobile responsiveness for all pages  
 - Etc…
