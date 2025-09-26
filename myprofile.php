@@ -1,4 +1,4 @@
-<?php 
+<?php  
 session_start();
 include 'db_connect.php';
 
@@ -233,8 +233,14 @@ $pastTrips = $pastQuery->get_result();
     <div class="trip-grid">
       <?php if ($upcomingTrips->num_rows > 0): ?>
         <?php while ($trip = $upcomingTrips->fetch_assoc()): ?>
+          <?php 
+            $imgPath = $trip['DestinationImage'];
+            if ($imgPath && !preg_match('/^uploads\//', $imgPath)) {
+                $imgPath = 'uploads/' . $imgPath;
+            }
+          ?>
           <div class="trip-card">
-            <img src="<?= htmlspecialchars($trip['DestinationImage']) ?>" alt="<?= htmlspecialchars($trip['DestinationName']) ?>">
+            <img src="<?= htmlspecialchars($imgPath) ?>" alt="<?= htmlspecialchars($trip['DestinationName']) ?>">
             <div class="trip-card-body">
               <h3><?= htmlspecialchars($trip['DestinationName']) ?></h3>
               <p><?= htmlspecialchars($trip['StartDate']) ?> → <?= htmlspecialchars($trip['EndDate']) ?></p>
@@ -254,8 +260,14 @@ $pastTrips = $pastQuery->get_result();
     <div class="trip-grid">
       <?php if ($pastTrips->num_rows > 0): ?>
         <?php while ($trip = $pastTrips->fetch_assoc()): ?>
+          <?php 
+            $imgPath = $trip['DestinationImage'];
+            if ($imgPath && !preg_match('/^uploads\//', $imgPath)) {
+                $imgPath = 'uploads/' . $imgPath;
+            }
+          ?>
           <div class="trip-card">
-            <img src="<?= htmlspecialchars($trip['DestinationImage']) ?>" alt="<?= htmlspecialchars($trip['DestinationName']) ?>">
+            <img src="<?= htmlspecialchars($imgPath) ?>" alt="<?= htmlspecialchars($trip['DestinationName']) ?>">
             <div class="trip-card-body">
               <h3><?= htmlspecialchars($trip['DestinationName']) ?></h3>
               <p><?= htmlspecialchars($trip['StartDate']) ?> → <?= htmlspecialchars($trip['EndDate']) ?></p>
