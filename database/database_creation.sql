@@ -45,14 +45,23 @@ CREATE TABLE IF NOT EXISTS `destination` (
 );
 
 -- Create Booking table
-CREATE TABLE IF NOT EXISTS `Booking` (
+-- CREATE TABLE IF NOT EXISTS `Booking` (
+--   `BookingID` INT AUTO_INCREMENT PRIMARY KEY,
+--   `ClientSpendings` DECIMAL(10, 2),
+--   `Reviews` TEXT,
+--   `ClientID` INT,
+--   `DestinationID` INT,
+--   FOREIGN KEY (`ClientID`) REFERENCES `Client`(`ClientID`),
+--   FOREIGN KEY (`DestinationID`) REFERENCES `Destination`(`DestinationID`)
+-- );
+
+CREATE TABLE IF NOT EXISTS `booking` (
   `BookingID` INT AUTO_INCREMENT PRIMARY KEY,
-  `ClientSpendings` DECIMAL(10, 2),
-  `Reviews` TEXT,
+  `Spendings` DECIMAL(10, 2),
+  `Revenue` DECIMAL(10, 2),
   `ClientID` INT,
   `DestinationID` INT,
-  FOREIGN KEY (`ClientID`) REFERENCES `Client`(`ClientID`),
-  FOREIGN KEY (`DestinationID`) REFERENCES `Destination`(`DestinationID`)
+  FOREIGN KEY (`ClientID`) REFERENCES `client`(`ClientID`),
+  FOREIGN KEY (`DestinationID`) REFERENCES `destination`(`DestinationID`)
 );
-
 

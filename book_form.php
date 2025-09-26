@@ -6,10 +6,7 @@ require 'send_confirmation.php'; // PHPMailer function
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $ClientName    = trim($_POST['ClientName']);
     $ClientSurname = trim($_POST['ClientSurname']);
-    $email         = trim($_POST['email']);
-    $number        = trim($_POST['number']); // Card info, not stored
-    $exDate        = trim($_POST['exDate']); 
-    $cvv           = trim($_POST['cvv']);    
+    $email         = trim($_POST['email']);   
 
     $DestinationID = isset($_GET['id']) ? intval($_GET['id']) : 0;
     if ($DestinationID <= 0) {
@@ -42,28 +39,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     $price = $dest['DestinationPrice'];
 
-    // 3. Insert booking
-    // $stmt = $conn->prepare("INSERT INTO book_form (BookingID, ClientID, ClientName, ClientSurname, DestinationID, Email, number, exDate, cvv) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
-    // $stmt->bind_param("ississss", $ClientID, $ClientName, $ClientSurname, $DestinationID, $email, $number, $exDate, $cvv);  
-    // $stmt->execute();
-
     $stmt = $conn->prepare(
-    "INSERT INTO book_form 
-    (ClientID, ClientName, ClientSurname, DestinationID, Email, number, exDate, cvv) 
-    VALUES (?, ?, ?, ?, ?, ?, ?, ?)"
+    "INSERT INTO booking (BookingID, ClientID, DestinationID) 
+    VALUES (?, ?, ?)"
 );
 
 // Bind 8 variables
 $stmt->bind_param(
-    "ississss",
+    "iii",
+    $BookingID,
     $ClientID,
-    $ClientName,
-    $ClientSurname,
     $DestinationID,
-    $email,
-    $number,
-    $exDate,
-    $cvv
 );
 
 $stmt->execute();
@@ -79,7 +65,7 @@ $stmt->execute();
     $stmt->execute();
 
     // 6. Send confirmation email
-    $emailStatus = sendConfirmationEmail($ClientName, $ClientSurname, $email, $price);
+    $emailStatus = sendConfirmationEmail($ClientName, $ClientSurname, $email, $DestinationID, $price);
 
     // include 'send_confirmation.php';
 

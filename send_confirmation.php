@@ -11,10 +11,11 @@ require 'vendor/autoload.php'; // Make sure PHPMailer is installed via Composer
  * @param string $ClientName
  * @param string $ClientSurname
  * @param string $email - client's email
+ * @param float $DestinationID
  * @param float  $price - booking price
  * @return string status message
  */
-function sendConfirmationEmail($ClientName, $ClientSurname, $email, $price) {
+function sendConfirmationEmail($ClientName, $ClientSurname, $email, $DestinationID, $price) {
     $status = '';
     try {
         // ---------------- Client Email ----------------
@@ -41,7 +42,8 @@ function sendConfirmationEmail($ClientName, $ClientSurname, $email, $price) {
         ";
         $mail->AltBody = "Dear {$ClientName} {$ClientSurname},\n\n
         Thank you for booking with Travel Atlas.\n
-        Your booking has been confirmed. The total cost is: €{$price}.\n
+        Your booking has been confirmed.\n 
+        The total cost is: €{$price}.\n
         We look forward to your trip!";
 
         $mail->send();
@@ -66,10 +68,12 @@ function sendConfirmationEmail($ClientName, $ClientSurname, $email, $price) {
             <h2>New Booking Notification</h2>
             <p>Client: <strong>{$ClientName} {$ClientSurname}</strong></p>
             <p>Email: <strong>{$email}</strong></p>
+            <p>Destination: <strong>{$DestinationID}</strong></p>
             <p>Total Price: <strong>€{$price}</strong></p>
         ";
         $adminMail->AltBody = "Client: {$ClientName} {$ClientSurname}\n
         Email: {$email}\n
+        DestinationID: {$DestinationID}\n
         Total Price: €{$price}";
 
         $adminMail->send();
