@@ -58,7 +58,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $emailStatus = sendConfirmationEmail($ClientName, $ClientSurname, $email, $DestinationID, $price);
 
     // 7. Redirect to prevent resubmission
-    // header("Location: booking.php?id=$DestinationID&status=success");
-    // exit;
+    header("Location: booking.php?id=$DestinationID&status=success");
+    exit;
 }
 ?>
