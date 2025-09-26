@@ -50,8 +50,6 @@ include 'db_connect.php';
             border: none; 
             border-radius: 8px; 
             cursor: pointer; 
-            /* display: block;  */
-            /* margin: 1rem auto;  */
             color: #fff; 
             font-size: 15px;
         }
