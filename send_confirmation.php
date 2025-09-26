@@ -70,14 +70,12 @@ function sendConfirmationEmail($ClientName, $ClientSurname, $email, $Destination
         Total Price: €{$price}";
 
         $adminMail->send();
+        $status .= "Admin notified.";
 
-
-        // ✅ Success response
-        echo json_encode(["status" => "success", "message" => "Emails sent successfully!"]);
+        return $status;
 
     } catch (Exception $e) {
-        // ❌ Failure response
-        echo json_encode(["status" => "error", "message" => "Mailer Error: {$e->getMessage()}"]);
+        return "Mailer Error: {$e->getMessage()}";
     }
 }
 ?>
