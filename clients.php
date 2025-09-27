@@ -31,7 +31,7 @@ if ($conn->connect_error) die("Connection failed: " . $conn->connect_error);
         flex-wrap: wrap;
         justify-content: space-between;
         align-items: center;
-        color: #ffffff; 
+        color: #ffffff;
         gap: 0.5rem;
     }
 
@@ -50,70 +50,68 @@ if ($conn->connect_error) die("Connection failed: " . $conn->connect_error);
         max-width: 250px;
     }
 
-    .table-wrapper {
+    /* Cards container */
+    .clients-container {
         width: 90%;
         max-width: 1200px;
         margin: 1rem auto 2rem auto;
-        overflow-x: auto;
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+        gap: 1rem;
+    }
+
+    .client-card {
         background: #fff;
         border-radius: 8px;
+        padding: 1rem;
         box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
     }
 
-    table {
-        width: 100%;
-        border-collapse: collapse;
-        min-width: 600px;
+    .client-card h3 {
+        margin: 0;
+        font-size: 1.1rem;
+        color: #333;
     }
 
-    th {
-        background: #625d5d;
-        color: #ffffff;
-        font-size: 15px;
+    .client-info {
+        font-size: 0.9rem;
+        color: #555;
     }
 
-    th, td {
-        padding: 0.6rem;
-        border: 1px solid #ddd;
-        text-align: center;
-        font-size: 14px;
+    .client-actions {
+        margin-top: 0.5rem;
     }
 
-    td {
-        color: #000000;
-    }
-
-    a.delete, a.edit {
-        color: red; 
+    .client-actions a {
+        color: red;
         text-decoration: none;
         font-weight: bold;
-    } 
-
-    a.delete:hover, a.edit:hover {
-        color: #ff0000; 
+        font-size: 0.9rem;
     }
 
-    /* Responsive styling */
-    @media (max-width: 768px) {
-        .clients-header {
-            flex-direction: column;
-            align-items: flex-start;
-        }
-        .clients-header h2 {
-            margin-bottom: 0.5rem;
-        }
-        table th, table td {
-            font-size: 13px;
-            padding: 0.5rem;
-        }
+    .client-actions a:hover {
+        color: #ff0000;
     }
 
+    /* Responsive adjustments */
     @media (max-width: 480px) {
         .clients-header h2 {
             font-size: 1.2rem;
         }
         .search-box input {
             max-width: 100%;
+        }
+        .client-card {
+            padding: 0.8rem;
+        }
+        .client-card h3 {
+            font-size: 1rem;
+        }
+        .client-info {
+            font-size: 0.85rem;
         }
     }
 </style>
@@ -127,42 +125,36 @@ if ($conn->connect_error) die("Connection failed: " . $conn->connect_error);
     </div>
 </div>
 
-<div class="table-wrapper">
-<table id="clientsTable">
-    <tr>
-        <th>Full Name</th>
-        <th>Username</th>
-        <th>Email</th>
-        <th>Gender</th>
-        <th>Action</th>
-    </tr>
-    <?php 
-    $result = $conn->query("
-        SELECT ClientID, CONCAT(ClientName, ' ', ClientSurname) AS FullName, Username, Email, Gender 
-        FROM client 
-        ORDER BY LOWER(ClientName) ASC, LOWER(ClientSurname) ASC
-    ");
-    while($row = $result->fetch_assoc()) {
-        echo "<tr>
-            <td>{$row['FullName']}</td>
-            <td>{$row['Username']}</td>
-            <td>{$row['Email']}</td>
-            <td>{$row['Gender']}</td>
-            <td><a class='delete' href='delete.php?id={$row['ClientID']}&table=client' onclick='return confirm(\"Are you sure?\")'>Delete</a></td>
-        </tr>";
-    }
-    ?>
-</table>
+<div class="clients-container" id="clientsContainer">
+<?php 
+$result = $conn->query("
+    SELECT ClientID, CONCAT(ClientName, ' ', ClientSurname) AS FullName, Username, Email, Gender 
+    FROM client 
+    ORDER BY LOWER(ClientName) ASC, LOWER(ClientSurname) ASC
+");
+while($row = $result->fetch_assoc()) {
+    echo "<div class='client-card'>
+            <h3>{$row['FullName']}</h3>
+            <div class='client-info'><strong>Username:</strong> {$row['Username']}</div>
+            <div class='client-info'><strong>Email:</strong> {$row['Email']}</div>
+            <div class='client-info'><strong>Gender:</strong> {$row['Gender']}</div>
+            <div class='client-actions'>
+                <a href='delete.php?id={$row['ClientID']}&table=client' onclick='return confirm(\"Are you sure?\")'>Delete</a>
+            </div>
+        </div>";
+}
+?>
 </div>
 
 <script>
+    // Client-side search filter for cards
     document.getElementById("searchInput").addEventListener("keyup", function() {
         let filter = this.value.toLowerCase();
-        let rows = document.querySelectorAll("#clientsTable tr:not(:first-child)");
+        let cards = document.querySelectorAll(".client-card");
         
-        rows.forEach(row => {
-            let text = row.textContent.toLowerCase();
-            row.style.display = text.includes(filter) ? "" : "none";
+        cards.forEach(card => {
+            let text = card.textContent.toLowerCase();
+            card.style.display = text.includes(filter) ? "" : "none";
         });
     });
 </script>
