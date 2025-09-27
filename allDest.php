@@ -210,7 +210,7 @@ $imagePath = "uploads/";
                                 alt="<?php echo htmlspecialchars($dest['DestinationName']); ?>">
                             <div class="card-content">
                                 <h4><?php echo htmlspecialchars($dest['DestinationName']); ?></h4>
-                                <p>Price: $<?php echo $dest['DestinationPrice']; ?></p>
+                                <p>Price: €<?php echo $dest['DestinationPrice']; ?></p>
                                 <p>
                                     <?php echo date("d/m/Y", strtotime($dest['StartDate'])); ?> 
                                     - 
