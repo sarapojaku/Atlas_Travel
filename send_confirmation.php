@@ -12,42 +12,51 @@ function sendConfirmationEmail($ClientName, $ClientSurname, $email, $Destination
     $status = '';
     try {
         // ---------------- Client Email ----------------
-        $mail = new PHPMailer(true);
-        $mail->isSMTP();
-        $mail->Host       = 'smtp.gmail.com';
-        $mail->SMTPAuth   = true;
-        $mail->Username   = 'travelatlas24@gmail.com';
-        $mail->Password   = 'vupphjsnmwupiuvd'; // Use App Password
-        $mail->SMTPSecure = 'tls';
-        $mail->Port       = 587;
+        $clientMail = new PHPMailer(true);
+        $clientMail->isSMTP();
+        $clientMail->Host       = 'smtp.gmail.com';
+        $clientMail->SMTPAuth   = true;
+        $clientMail->Username   = 'travelatlas24@gmail.com';
+        $clientMail->Password   = 'vupphjsnmwupiuvd'; // Use App Password
+        $clientMail->SMTPSecure = 'tls';
+        $clientMail->Port       = 587;
 
-        $mail->setFrom('travelatlas24@gmail.com', 'Travel Atlas');
-        $mail->addAddress($email, $ClientName . ' ' . $ClientSurname);
+        $clientMail->setFrom('travelatlas24@gmail.com', 'Travel Atlas');
+        $clientMail->addAddress($email, $ClientName . ' ' . $ClientSurname);
 
-        $mail->isHTML(true);
-        $mail->Subject = 'Booking Confirmation - Travel Atlas';
-        $mail->Body    = "
-            <h2>Booking Confirmation</h2>
+        $clientMail->isHTML(true);
+        $clientMail->Subject = 'Booking Confirmation - Travel Atlas';
+        $clientMail->Body = "
+            <h2 style='color:#2E86C1;'>Booking Confirmation</h2>
             <p>Dear <strong>{$ClientName} {$ClientSurname}</strong>,</p>
-            <p>We are pleased to confirm your booking with <strong>Travel Atlas</strong>.
-            The total cost is: <strong>€{$price}</strong>. 
-            Our team is dedicated to ensuring you have an enjoyable and seamless travel experience. 
-            Should you have any questions or require assistance before your trip, please do not hesitate to contact us.</p>
-            <p>Thank you for choosing Travel Atlas. We look forward to welcoming you on your journey!</p>
-            <p>warm regards,</p>
-            <p><strong>Travel Atlas Team</strong></p>
-        ";
-        $mail->AltBody = "Dear {$ClientName} {$ClientSurname},\n\n
-        We are pleased to confirm your booking with Travel Atlas.\n
-        Your booking has been confirmed.\n 
-        The total cost is: €{$price}.\n
-        Our team is dedicated to ensuring you have an enjoyable and seamless travel experience. \n
-        Should you have any questions or require assistance before your trip, please do not hesitate to contact us.\n
-        Thank you for choosing Travel Atlas. We look forward to welcoming you on your journey!\n
-        Warm regards,\n
-        Travel Atlas Team";
 
-        $mail->send();
+            <p>We are pleased to confirm your booking with <strong>Travel Atlas</strong>. Here are your booking details:</p>
+            <ul>
+                <li><strong>Total Cost:</strong> €{$price}</li>
+                <li><strong>Destination ID:</strong> {$DestinationID}</li>
+            </ul>
+
+            <p>Our team is committed to ensuring you have a smooth and enjoyable travel experience. 
+            If you have any questions or require assistance prior to your trip, please do not hesitate to contact us.</p>
+
+            <p>Thank you for choosing <strong>Travel Atlas</strong>. We look forward to welcoming you!</p>
+
+            <p>Warm regards,<br>
+            <strong>Travel Atlas Team</strong></p>
+        ";
+
+        $clientMail->AltBody = "Dear {$ClientName} {$ClientSurname},\n\n
+            We are pleased to confirm your booking with Travel Atlas.\n
+            Booking Details:\n
+            - Total Cost: €{$price}\n
+            - Destination ID: {$DestinationID}\n\n
+            Our team is committed to ensuring you have a smooth and enjoyable travel experience. 
+            If you have any questions or need assistance, please contact us.\n\n
+            Thank you for choosing Travel Atlas. We look forward to welcoming you!\n
+            Warm regards,\n
+            Travel Atlas Team";
+
+        $clientMail->send();
         $status .= "Client email sent to {$email}. ";
 
         // ---------------- Admin Notification ----------------
@@ -61,21 +70,22 @@ function sendConfirmationEmail($ClientName, $ClientSurname, $email, $Destination
         $adminMail->Port       = 587;
 
         $adminMail->setFrom('travelatlas24@gmail.com', 'Travel Atlas');
-        $adminMail->addAddress('travelatlas24@gmail.com', 'Admin'); 
+        $adminMail->addAddress('travelatlas24@gmail.com', 'Admin');
 
         $adminMail->isHTML(true);
-        $adminMail->Subject = "New Booking: {$ClientName} {$ClientSurname}";
-        $adminMail->Body    = "
-            <h2>New Booking Notification</h2>
-            <p>Client: <strong>{$ClientName} {$ClientSurname}</strong></p>
-            <p>Email: <strong>{$email}</strong></p>
-            <p>Destination ID: <strong>{$DestinationID}</strong></p>
-            <p>Total Price: <strong>€{$price}</strong></p>
+        $adminMail->Subject = "New Booking Notification - {$ClientName} {$ClientSurname}";
+        $adminMail->Body = "
+            <h2 style='color:#C0392B;'>New Booking Received</h2>
+            <p><strong>Client:</strong> {$ClientName} {$ClientSurname}</p>
+            <p><strong>Email:</strong> {$email}</p>
+            <p><strong>Destination ID:</strong> {$DestinationID}</p>
+            <p><strong>Total Price:</strong> €{$price}</p>
         ";
-        $adminMail->AltBody = "Client: {$ClientName} {$ClientSurname}\n
-        Email: {$email}\n
-        DestinationID: {$DestinationID}\n
-        Total Price: €{$price}";
+        $adminMail->AltBody = "New Booking Received\n
+            Client: {$ClientName} {$ClientSurname}\n
+            Email: {$email}\n
+            Destination ID: {$DestinationID}\n
+            Total Price: €{$price}";
 
         $adminMail->send();
         $status .= "Admin notified.";
