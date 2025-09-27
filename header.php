@@ -12,15 +12,15 @@ include 'db_connect.php';
     <link rel="stylesheet" href="styles.css"/>
     <style>
     @media (max-width: 600px) {
-      .footer-inner {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 1rem; /* space between top and bottom sections */
+      .nav-inner {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
       }
-      .footer-right {
-        flex-direction: column;
+      .nav-links {
+        display: inline-block;
+        font-size: 15px;
         align-items: flex-start;
-        gap: 0.5rem;
       }
     }
     </style>
