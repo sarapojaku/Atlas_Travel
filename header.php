@@ -10,25 +10,39 @@ include 'db_connect.php';
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Header</title>
     <link rel="stylesheet" href="styles.css"/>
+    <style>
+    @media (max-width: 600px) {
+      .footer-inner {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem; /* space between top and bottom sections */
+      }
+      .footer-right {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.5rem;
+      }
+    }
+    </style>
 </head>
 <body>
     <header class="navbar">
-  <div class="container nav-inner">
-    <a href="index.php" class="logo">
-      <div class="logo-icon"><img src="images/logo.png" /></div>
-      <span>Atlas Travel</span>
-    </a>
-    <nav class="nav-links">
-      <a href="#deal">Destinations</a>
-      <a href="#contact">Contact Us</a>
-      <?php if (isset($_SESSION['username'])): ?>
-        <span class="user-links">
-          <a href="myprofile.php" class="btn username-link"><?php echo htmlspecialchars($_SESSION['username']); ?></a>
-        <?php else: ?>
-          <a href="client_login.php" class="btn">Log In</a>
-          <?php endif; ?>
+      <div class="container nav-inner">
+        <a href="index.php" class="logo">
+          <div class="logo-icon"><img src="images/logo.png" /></div>
+          <span>Atlas Travel</span>
+        </a>
+        <nav class="nav-links">
+          <a href="#deal">Destinations</a>
+          <a href="#contact">Contact Us</a>
+          <?php if (isset($_SESSION['username'])): ?>
+            <span class="user-links">
+              <a href="myprofile.php" class="btn username-link"><?php echo htmlspecialchars($_SESSION['username']); ?></a>
+              <?php else: ?>
+                <a href="client_login.php" class="btn">Log In</a>
+                <?php endif; ?>
         </nav>
-  </div>
-</header>
+      </div>
+    </header>
 </body>
 </html>
