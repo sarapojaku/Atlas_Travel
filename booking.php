@@ -202,7 +202,6 @@ $imagePath = "uploads/";
                     <input type="text" id="cvv" name="cvv" placeholder="CVV" required>
                 </div>
                 <button type="submit">Submit Payment.</button>
-                 <!-- <a href="bill.php">Submit payment</a> -->
                 <div id="book-response"></div>
             </form>
         </div>
