@@ -1,4 +1,4 @@
-<?php 
+<?php  
 include 'db_connect.php'; 
 
 // Fetch all destinations 
@@ -39,7 +39,7 @@ $imagePath = "uploads/";
     --radius: 16px; 
   } 
   h5 { 
-    font-size: 33px; 
+    font-size: 28px; 
     text-align: center; 
     margin-top: 10px; 
     margin-bottom: 30px; 
@@ -132,11 +132,13 @@ $imagePath = "uploads/";
     justify-content: center;
     background: var(--bg);
     color: #ffffff;
-    margin: 10px 685px;
-    padding: 7px;
+    margin: 20px auto;
+    max-width: 250px;
+    padding: 10px;
     font-weight: bold;
     border-radius: 20px;
     transition: transform 0.3s ease, box-shadow 0.3s ease; 
+    text-align: center;
   } 
   .allDest:hover {
     background: var(--muted);
@@ -146,8 +148,53 @@ $imagePath = "uploads/";
   h6 {
     text-align: center;
     font-weight: lighter;
-    font-size: 20px;
+    font-size: 18px;
     margin-top: 10px;
+  }
+
+  /* 📱 Tablet responsiveness */
+  @media (max-width: 768px) {
+    .deals {
+      flex-direction: column; /* stack vertically */
+      transform: none !important; /* stop horizontal shift */
+    }
+    .deal {
+      flex: 0 0 100%;
+      margin: 10px 10px;
+      max-width: 90%;
+    }
+    .deal img {
+      width: 120px;
+      height: 120px;
+    }
+    .arrow {
+      display: none; /* hide arrows */
+    }
+    h5 {
+      font-size: 22px;
+    }
+    h6 {
+      font-size: 16px;
+    }
+  }
+
+  /* 📱 Small phone responsiveness */
+  @media (max-width: 500px) {
+    .deal {
+      max-width: 100%;
+      padding: 1rem;
+    }
+    .deal h2 {
+      font-size: 18px;
+    }
+    .deal img {
+      width: 100px;
+      height: 100px;
+    }
+    .allDest {
+      width: 100%;
+      font-size: 14px;
+    }
   }
   </style> 
 </head> 
@@ -174,8 +221,6 @@ $imagePath = "uploads/";
   <h6>Explore more of our destinations!</h6>
   <a href="allDest.php" class="allDest">All Destinations</a>
 
-
-
   <script> 
   const deals = document.getElementById("deals");
   let cards = Array.from(deals.children);
@@ -191,17 +236,17 @@ $imagePath = "uploads/";
     }
   }
 
-  // Initialize carousel
+  // Initialize carousel (desktop only)
   function initCarousel() {
+    if (window.innerWidth <= 768) return; // disable carousel on mobile
+
     cards = Array.from(deals.children);
     calculateCardWidth();
 
     if (cards.length > visibleDeals) {
-      // Remove old clones if re-initialized
       deals.innerHTML = "";
       const originals = <?php echo json_encode($destinations); ?>;
 
-      // Re-render cards
       originals.forEach(dest => {
         const div = document.createElement("div");
         div.className = "deal";
@@ -265,14 +310,16 @@ $imagePath = "uploads/";
     }
   }
 
-  // Recalculate on resize
   window.addEventListener("resize", () => {
+    if (window.innerWidth <= 768) {
+      deals.style.transform = "none"; // reset transform for stacked layout
+      return;
+    }
     calculateCardWidth();
     deals.style.transition = "none";
     deals.style.transform = `translateX(-${currentIndex * cardWidth}px)`;
   });
 
-  // Init on load
   window.addEventListener("load", initCarousel);
   </script> 
 </body> 
