@@ -63,7 +63,7 @@ $imagePath = "uploads/";
             background: #ffffff;
             font-size: 15px;
         }
-        .book-form a {
+        button {
             background: #625d5d;
             color: #ffffff;
             border-radius: 10px;
@@ -74,7 +74,7 @@ $imagePath = "uploads/";
             transition: transform 0.3s ease, box-shadow 0.3s ease;
             text-align: center;
         }
-        .book-form a:hover {
+        button:hover {
             background: #767778;
             transform: scale(1.05);
             box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
@@ -201,8 +201,8 @@ $imagePath = "uploads/";
                     <input type="month" id="exDate" name="exDate" required>
                     <input type="text" id="cvv" name="cvv" placeholder="CVV" required>
                 </div>
-                <!-- <button type="submit">Submit Payment.</button> -->
-                 <a href="bill.php">Submit payment</a>
+                <button type="submit">Submit Payment.</button>
+                 <!-- <a href="bill.php">Submit payment</a> -->
                 <div id="book-response"></div>
             </form>
         </div>

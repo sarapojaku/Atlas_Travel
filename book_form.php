@@ -39,7 +39,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     $price = $dest['DestinationPrice'];
 
-    // 3. Insert booking (BookingID auto-increment → no need to pass it)
+    // 3. Insert booking
     $stmt = $conn->prepare("INSERT INTO booking (ClientID, DestinationID) VALUES (?, ?)");
     $stmt->bind_param("ii", $ClientID, $DestinationID);
     $stmt->execute();
@@ -57,8 +57,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // 6. Send confirmation email
     $emailStatus = sendConfirmationEmail($ClientName, $ClientSurname, $email, $DestinationID, $price);
 
-    // 7. Redirect to prevent resubmission
-    header("Location: booking.php?id=$DestinationID&status=success");
+    // ✅ Store client info in session
+    $_SESSION['clientName'] = $ClientName;
+    $_SESSION['clientSurname'] = $ClientSurname;
+    $_SESSION['clientEmail'] = $email;
+
+    // 7. Redirect to bill.php
+    header("Location: bill.php?id=$DestinationID&status=success");
     exit;
 }
 ?>
