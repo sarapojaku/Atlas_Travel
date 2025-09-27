@@ -40,17 +40,17 @@
 </head>
 <body>
     <footer class="footer">
-  <div class="container footer-inner">
-    <div class="footer-left">
-      <img src="images/logo.png" alt="TravelAgency Logo" />
-      <span>Atlas Travel</span>
-    </div>
-    <div class="footer-right">
-      <a href="tel:+355693575102" class="muted">+355 69 357 5102</a>
-      <a href="https://www.instagram.com/whyhatesara/">Instagram</a>
-      <a href="#">Facebook</a>
-    </div>
-  </div>
-</footer>
+      <div class="container footer-inner">
+        <div class="footer-left">
+          <img src="images/logo.png" alt="TravelAgency Logo" />
+          <span>Atlas Travel</span>
+        </div>
+        <div class="footer-right">
+          <a href="tel:+355693575102" class="muted">+355 69 357 5102</a>
+          <a href="https://www.instagram.com/whyhatesara/">Instagram</a>
+          <a href="#">Facebook</a>
+        </div>
+      </div>
+    </footer>
 </body>
 </html>
