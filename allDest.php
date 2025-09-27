@@ -71,113 +71,185 @@ $imagePath = "uploads/";
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>All Destinations</title>
-  <link rel="icon" href="images/logo.png" type="image/png" />
-  <link rel="shortcut icon" href="images/logo.png" type="image/png" />
+<link rel="icon" href="images/logo.png" type="image/png" />
+<link rel="shortcut icon" href="images/logo.png" type="image/png" />
 <style>
-    body {
-        margin: 0;
-        font-family: Arial, sans-serif;
-    }
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+}
 
+.layout {
+    display: flex;
+    align-items: flex-start;
+    gap: 20px;
+    padding: 10px;
+}
+
+/* Sidebar */
+.sidebar-toggle {
+    display: none;
+    background: #333;
+    color: #fff;
+    padding: 10px 15px;
+    font-size: 18px;
+    border: none;
+    cursor: pointer;
+    width: 100%;
+    text-align: left;
+}
+.sidebar {
+    width: 200px;
+    padding: 10px;
+    background: #f4f4f4;
+    position: sticky;
+    top: 10px;
+    align-self: flex-start;
+    max-height: calc(100vh - 20px);
+    overflow-y: auto;
+    border-radius: 6px;
+    flex-shrink: 0;
+    transition: max-height 0.3s ease, opacity 0.3s ease;
+}
+.sidebar h3 {
+    margin-top: 0;
+}
+.sidebar a {
+    display: block;
+    padding: 8px;
+    margin-bottom: 5px;
+    background: #f4f4f4;
+    text-decoration: none;
+    color: #333;
+    border-radius: 4px;
+}
+.sidebar a:hover {
+    background: #bbb;
+}
+
+/* Main content */
+.main-content {
+    flex: 1;
+    padding: 10px;
+}
+.destinations {
+    margin-bottom: 20px;
+}
+.destination-card {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border: 1px solid #ddd;
+    padding: 15px;
+    margin: 10px 0;
+    border-radius: 10px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    gap: 15px;
+}
+.destination-card img {
+    width: 150px;
+    height: 100px;
+    object-fit: cover;
+    border-radius: 8px;
+    flex-shrink: 0;
+}
+.card-content {
+    flex: 1;
+}
+.card-action {
+    margin-left: 20px;
+    display: flex;
+    align-items: center;
+}
+.learn-more {
+    display: inline-block;
+    padding: 8px 12px;
+    background: #625d5d;
+    color: #fff;
+    border-radius: 6px;
+    text-decoration: none;
+    transition: background 0.3s ease;
+    white-space: nowrap;
+}
+.learn-more:hover {
+    background: #767778;
+}
+
+/* Pagination */
+.pagination {
+    margin-top: 20px;
+    text-align: center;
+    flex-wrap: wrap;
+}
+.pagination a {
+    display: inline-block;
+    padding: 6px 10px;
+    margin: 3px;
+    border: 1px solid #ddd;
+    text-decoration: none;
+    color: #333;
+    border-radius: 4px;
+}
+.pagination a.active {
+    background: #333;
+    color: #fff;
+}
+.pagination a:hover {
+    background: #555;
+    color: #fff;
+}
+
+/* ---- Responsive styles ---- */
+@media (max-width: 768px) {
     .layout {
-        display: flex;
-        align-items: flex-start;
-        gap: 20px;
+        flex-direction: column;
     }
-
-    .sidebar {
-        width: 200px;
-        padding: 10px;
-        background: #f4f4f4;
-        position: sticky;
-        top: 10px;
-        align-self: flex-start;
-        max-height: calc(100vh - 20px);
-        overflow-y: auto;
-        border-radius: 6px;
-    }
-    .sidebar h3 {
-        margin-top: 0;
-    }
-    .sidebar a {
+    .sidebar-toggle {
         display: block;
-        padding: 8px;
-        margin-bottom: 5px;
-        background: #f4f4f4;
-        text-decoration: none;
-        color: #333;
     }
-    .sidebar a:hover {
-        background: #bbb;
+    .sidebar {
+        width: 100%;
+        max-height: 0;
+        opacity: 0;
+        overflow: hidden;
+        position: relative;
+        transition: max-height 0.3s ease, opacity 0.3s ease;
     }
-    .main-content {
-        flex: 1;
-        padding: 20px;
-    }
-    .destinations {
-        margin-bottom: 20px;
+    .sidebar.open {
+        max-height: 70vh;   /* allows scrolling */
+        opacity: 1;
+        overflow-y: auto;   /* scroll inside if too tall */
     }
     .destination-card {
-        display: flex;
-        align-items: center; /* Vertically center items */
-        justify-content: space-between;
-        border: 1px solid #ddd;
-        padding: 15px;
-        margin: 10px 0;
-        border-radius: 10px;
-        box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+        flex-direction: column;
+        align-items: flex-start;
     }
     .destination-card img {
-        width: 150px;
-        height: 100px;
-        object-fit: cover;
-        border-radius: 8px;
-        margin-right: 15px;
-    }
-    .card-content {
-        flex: 1;
+        width: 100%;
+        height: auto;
+        margin-bottom: 10px;
     }
     .card-action {
-        margin-left: 20px;
-        display: flex;
-        align-items: center; /* Middle-right alignment */
+        margin-left: 0;
+        margin-top: 10px;
+        width: 100%;
     }
     .learn-more {
-        display: inline-block;
-        padding: 8px 12px;
-        background: #625d5d;
-        color: #fff;
-        border-radius: 6px;
-        text-decoration: none;
-        transition: background 0.3s ease;
+        display: block;
+        text-align: center;
+        width: 100%;
     }
-    .learn-more:hover {
-        background: #767778;
-    }
-    .pagination {
-        margin-top: 20px;
-    }
-    .pagination a {
-        display: inline-block;
-        padding: 6px 10px;
-        margin: 0 3px;
-        border: 1px solid #ddd;
-        text-decoration: none;
-        color: #333;
-        border-radius: 4px;
-    }
-    .pagination a.active {
-        background: #333;
-        color: #fff;
-    }
-    .pagination a:hover {
-        background: #555;
-        color: #fff;
-    }
+}
+
 </style>
 </head>
 <body>
 <?php include 'header.php';?>
+
+<!-- Sidebar toggle for mobile -->
+<button class="sidebar-toggle" onclick="document.querySelector('.sidebar').classList.toggle('open')">
+    ☰ Countries
+</button>
 
 <div class="layout">
     <!-- Sidebar -->
@@ -251,5 +323,6 @@ $imagePath = "uploads/";
 
 <!-- Footer Section -->
 <?php include 'footer.php';?>
+
 </body>
 </html>
