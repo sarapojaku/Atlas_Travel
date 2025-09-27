@@ -11,112 +11,161 @@ if ($conn->connect_error) die("Connection failed: " . $conn->connect_error);
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Countries</title>
-    <style>
-    body {
-        background: #625d5d;
-        font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        color: #222;
-    }
-    h1 {
-        text-align: center;
-        color: #ffffff;
-    }
-    form {
-        background: #ffffff;
-        padding: 1rem;
-        border-radius: 12px;
-        margin: 2rem auto;
-        max-width: 800px;
-        display: flex;
-        flex-wrap: wrap;
-        gap: 10px;
-        justify-content: center;
-    }
-    form input, form select {
-        padding: 8px;
-        border-radius: 8px;
-        border: 1px solid #ccc;
-    }
-    form button {
-        background: #625d5d;
-        color: #fff;
-        padding: 8px 16px;
-        border: none;
-        border-radius: 8px;
-        cursor: pointer;
-    }
-    form button:hover {
-        background: #4a4545;
-    }
-    .countries-header {
-        width: 70%;
-        margin: 2rem auto 0 auto;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        color: #ffffff; 
-    }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Countries</title>
+<style>
+body {
+    background: #625d5d;
+    font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: #222;
+    margin: 0;
+    padding: 0;
+}
+
+h1 {
+    text-align: center;
+    color: #ffffff;
+    margin-top: 1.5rem;
+}
+
+/* Form styling */
+form {
+    background: #ffffff;
+    padding: 1rem;
+    border-radius: 12px;
+    margin: 2rem auto;
+    max-width: 800px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center;
+}
+
+form input, form select {
+    padding: 8px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+}
+
+form button {
+    background: #625d5d;
+    color: #fff;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+form button:hover {
+    background: #4a4545;
+}
+
+/* Header and search box */
+.countries-header {
+    width: 90%;
+    max-width: 1200px;
+    margin: 1.5rem auto 0 auto;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    color: #ffffff; 
+    gap: 0.5rem;
+}
+
+.countries-header h2 {
+    margin: 0;
+    font-size: 1.5rem;
+    color: #ffffff;
+}
+
+.search-box input {
+    padding: 6px 10px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    font-size: 14px;
+    width: 100%;
+    max-width: 250px;
+}
+
+/* Cards container */
+.countries-container {
+    width: 90%;
+    max-width: 1200px;
+    margin: 1rem auto 2rem auto;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 1rem;
+}
+
+.country-card {
+    background: #fff;
+    border-radius: 8px;
+    padding: 1rem;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.country-card h3 {
+    margin: 0;
+    font-size: 1.1rem;
+    color: #333;
+}
+
+.country-info {
+    font-size: 0.9rem;
+    color: #555;
+}
+
+.country-actions {
+    margin-top: 0.5rem;
+}
+
+.country-actions a {
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 0.9rem;
+    margin-right: 0.5rem;
+}
+
+.country-actions a.edit {
+    color: #007bff;
+}
+
+.country-actions a.delete {
+    color: red;
+}
+
+.country-actions a.edit:hover {
+    color: #0056b3;
+}
+
+.country-actions a.delete:hover {
+    color: #ff0000;
+}
+
+/* Responsive adjustments */
+@media (max-width: 480px) {
     .countries-header h2 {
-        margin: 0;
-        text-align: left;
-        color: #ffffff;
+        font-size: 1.2rem;
     }
     .search-box input {
-        padding: 6px 10px;
-        border-radius: 8px;
-        border: 1px solid #ccc;
-        font-size: 14px;
+        max-width: 100%;
     }
-    table {
-        width: 70%; 
-        margin: 1rem auto 2rem auto; 
-        border-collapse: collapse; 
-        background: #fff;
-        border-radius: 8px;
-        overflow: hidden;
-        box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+    .country-card {
+        padding: 0.8rem;
     }
-    th {
-        background: #625d5d;
-        color: #ffffff;
-        font-size: 15px;
+    .country-card h3 {
+        font-size: 1rem;
     }
-    th, td {
-        padding: 0.6rem; 
-        border: 1px solid #ddd; 
-        text-align: center;
-        font-size: 14px;
+    .country-info {
+        font-size: 0.85rem;
     }
-    td {
-        color: #000000;
-    }
-    a.delete, a.edit, a.download-link {
-        text-decoration: none;
-        font-weight: bold;
-    }
-    a.delete {
-        color: red;
-    }
-    a.edit {
-        color: #007bff;
-    }
-    a.download-link {
-        color: #222;
-    }
-    a.delete:hover {
-        color: #ff0000; 
-    }
-    a.edit:hover {
-        color: #0056b3;
-    }
-    a.download-link:hover {
-        text-decoration: underline;
-        color: #444;
-    }
-    </style>
+}
+</style>
 </head>
 <body>
 
@@ -124,7 +173,6 @@ if ($conn->connect_error) die("Connection failed: " . $conn->connect_error);
 <form action="addCountry.php" method="post" enctype="multipart/form-data">
     <input type="text" name="CountryName" placeholder="Country Name" required>
     <input type="text" name="CountryInfo" placeholder="Country Info" required>
-
     <button type="submit" name="submit">Add a New Country</button>
 </form>
 
@@ -135,29 +183,37 @@ if ($conn->connect_error) die("Connection failed: " . $conn->connect_error);
     </div>
 </div>
 
-<table id="countriesTable">
-    <tr>
-        <th>Country Name</th>
-        <th>Country Info</th>
-        <th>Action</th>
-    </tr>
-    <?php 
-    // Alphabetical order, case-insensitive
-    $result = $conn->query("
-        SELECT CountryID, CountryName, CountryInfo
-        FROM country
-        ORDER BY LOWER(CountryName) ASC
-    ");
-    while($row = $result->fetch_assoc()) {
-        echo "<tr>
-            <td>{$row['CountryName']}</td>
-            <td>{$row['CountryInfo']}</td>
-            <td><a class='edit' href='editCountry.php?id={$row['CountryID']}&table=country' onclick='return confirm(\"Are you sure?\")'>Edit</a> / 
+<div class="countries-container" id="countriesContainer">
+<?php 
+$result = $conn->query("
+    SELECT CountryID, CountryName, CountryInfo
+    FROM country
+    ORDER BY LOWER(CountryName) ASC
+");
+while($row = $result->fetch_assoc()) {
+    echo "<div class='country-card'>
+            <h3>{$row['CountryName']}</h3>
+            <div class='country-info'>{$row['CountryInfo']}</div>
+            <div class='country-actions'>
+                <a class='edit' href='editCountry.php?id={$row['CountryID']}&table=country' onclick='return confirm(\"Are you sure?\")'>Edit</a>
                 <a class='delete' href='delete.php?id={$row['CountryID']}&table=country' onclick='return confirm(\"Are you sure?\")'>Delete</a>
-            </td>
-        </tr>";
-    }
-    ?>
-</table>
+            </div>
+        </div>";
+}
+?>
+</div>
+
+<script>
+document.getElementById("searchInput").addEventListener("keyup", function() {
+    let filter = this.value.toLowerCase();
+    let cards = document.querySelectorAll(".country-card");
+    
+    cards.forEach(card => {
+        let text = card.textContent.toLowerCase();
+        card.style.display = text.includes(filter) ? "" : "none";
+    });
+});
+</script>
+
 </body>
 </html>
