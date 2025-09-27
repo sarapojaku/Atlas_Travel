@@ -39,12 +39,13 @@ $imagePath = "uploads/";
     .learn-more {
         display: flex;
         justify-content: center;
-        align-items: center;
+        align-items: flex-start;
         margin-top: 10px;
         margin-bottom: 20px;
         gap: 50px;
         flex-wrap: wrap;
         text-align: center;
+        padding: 0 15px;
     }
     h2 {
         margin-top: 10px;
@@ -53,9 +54,9 @@ $imagePath = "uploads/";
     }
     .name-image img {
         width: 300px;
-        height: 300px;
+        max-width: 300px;
+        height: auto;
         border-radius: 20px;
-        flex: 0 0 auto;
     }
     .info {
         max-width: 425px;
@@ -64,27 +65,108 @@ $imagePath = "uploads/";
     .info p {
         margin-bottom: 5px;
         line-height: 1.5;
+        /* font-size: 16px; */
     }
     .info ul {
         list-style: none;
+ 
+        /* padding: 0;
+        margin: 5px 0;
+        font-size: 15px; */
     }
     .info ul span {
         font-weight: bold;
     }
-    .book-btn {
+    .info h3 {
+        margin-top: 15px;
+        margin-bottom: 8px;
+        font-size: 18px;
+    }
+    /* .book-btn {
         display: inline-block;
+         width: fit-content;
+        align-items: left;
         background: #625d5d;
         color: #ffffff;
         border-radius: 10px;
-        padding: 5px 15px;
-        margin-top: 10px;
+        padding: 10px 20px;
+        margin: 15px auto 0 auto;
+        text-decoration: none;
+        font-size: 16px;
         transition: transform 0.3s ease, box-shadow 0.3s ease; 
     }
     .book-btn:hover {
+        background: #767778;
+        transform: scale(1.05); 
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15); 
+    }
+
+    @media (max-width: 768px) {
+        h2 {
+            font-size: 22px;
+        }
+        .info {
+            text-align: center;
+            max-width: 100%;
+        }
+        .info ul {
+            text-align: left;
+            display: inline-block;
+        }
+        .book-btn {
+            margin: 20px auto 0 auto;
+        }
+    }
+
+    @media (max-width: 480px) {
+        h2 {
+            font-size: 20px;
+        }
+        .info p {
+            font-size: 14px;
+        }
+        .book-btn {
+            padding: 8px 16px;
+            font-size: 14px;
+        }
+    } */
+        .book-btn {
+    display: inline-block;
+    background: #625d5d;
+    color: #ffffff;
+    border-radius: 10px;
+    padding: 10px 20px;
+    margin-top: 15px; /* no auto margin here */
+    text-decoration: none;
+    font-size: 16px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease; 
+}
+.book-btn:hover {
     background: #767778;
     transform: scale(1.05); 
     box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15); 
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+    h2 {
+        font-size: 22px;
     }
+    .info {
+        text-align: center;
+        max-width: 100%;
+    }
+    .info ul {
+        text-align: left;
+        display: inline-block;
+    }
+    .book-btn {
+        display: block;
+        width: fit-content;
+        margin: 20px auto 0 auto; 
+    }
+}
+
     </style>
 </head>
 <body>
@@ -110,23 +192,28 @@ $imagePath = "uploads/";
     </div>
     <div class="info">
         <p><?php echo nl2br($dest['DestinationInfo']); ?></p>
+        
         <!-- Top 3 Places to Visit -->
         <?php if (!empty($dest['DestinationPlaces'])): ?>
             <h3>Top Places to Visit:</h3>
-            <ul style="list-style: disc; padding-left: 20px; margin-bottom: 5px;">
+            <ul style="list-style: disc; padding-left: 20px; margin-bottom: 10px;">
                 <?php $places = explode(',', $dest['DestinationPlaces']);
                 foreach ($places as $place): 
                 ?>
                 <li><?php echo htmlspecialchars(trim($place)); ?></li>
                 <?php endforeach; ?>
             </ul>
-            <?php endif; ?>
-            <ul>
-                <span>Date: </span><?php echo date("d/m/Y", strtotime($dest['StartDate'])) . " - " . date("d/m/Y", strtotime($dest['EndDate'])); ?>
-                <li><span>Price: €</span><?php echo htmlspecialchars($dest['DestinationPrice']); ?></li>
-            </ul>
-            <a href="booking.php?id=<?php echo $destinationId; ?>" class="book-btn">Book Now</a>
-        </div>
+        <?php endif; ?>
+
+        <!-- Date & Price -->
+        <ul style="list-style: none; padding-left: 0; margin-top: 10px;">
+            <li><span>Date: </span><?php echo date("d/m/Y", strtotime($dest['StartDate'])) . " - " . date("d/m/Y", strtotime($dest['EndDate'])); ?></li>
+            <li><span>Price: €</span><?php echo htmlspecialchars($dest['DestinationPrice']); ?></li>
+        </ul>
+
+        <!-- Book Now button under lists -->
+        <a href="booking.php?id=<?php echo $destinationId; ?>" class="book-btn">Book Now</a>
+    </div>
 </section>
 
 <!-- Contact Us Section -->
