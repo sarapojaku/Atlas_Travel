@@ -8,7 +8,7 @@ require 'vendor/autoload.php'; // Ensure PHPMailer is installed via Composer
  * Send booking confirmation email to client
  * Also notifies admin of the new booking
  */
-function sendConfirmationEmail($ClientName, $ClientSurname, $email, $DestinationID, $price) {
+function sendConfirmationEmailWithPDF($ClientName, $ClientSurname, $email, $DestinationID, $price, $pdfFilePath) {
     $status = '';
     try {
         // ---------------- Client Email ----------------
@@ -17,7 +17,7 @@ function sendConfirmationEmail($ClientName, $ClientSurname, $email, $Destination
         $mail->Host       = 'smtp.gmail.com';
         $mail->SMTPAuth   = true;
         $mail->Username   = 'travelatlas24@gmail.com';
-        $mail->Password   = 'vupphjsnmwupiuvd'; // Use App Password
+        $mail->Password   = 'vupphjsnmwupiuvd';
         $mail->SMTPSecure = 'tls';
         $mail->Port       = 587;
 
@@ -30,15 +30,15 @@ function sendConfirmationEmail($ClientName, $ClientSurname, $email, $Destination
             <h2>Booking Confirmation</h2>
             <p>Dear <strong>{$ClientName} {$ClientSurname}</strong>,</p>
             <p>Thank you for booking with <strong>Travel Atlas</strong>.</p>
-            <p>Your booking has been confirmed. The total cost is: <strong>€{$price}</strong>.</p>
-            <p>We look forward to your trip!</p>
+            <p>Your booking has been confirmed. Please find your receipt attached as PDF.</p>
         ";
-        $mail->AltBody = "Dear {$ClientName} {$ClientSurname},\n\n
+        $mail->AltBody = "Dear {$ClientName} {$ClientSurname},\n
         Thank you for booking with Travel Atlas.\n
-        Your booking has been confirmed.\n 
-        The total cost is: €{$price}.\n
-        We look forward to your trip!";
+        Your booking has been confirmed.\n
+        Please check the attached PDF receipt.";
 
+        // Attach PDF
+        $mail->addAttachment($pdfFilePath, "BookingReceipt.pdf");
         $mail->send();
         $status .= "Client email sent to {$email}. ";
 
@@ -64,13 +64,11 @@ function sendConfirmationEmail($ClientName, $ClientSurname, $email, $Destination
             <p>Destination ID: <strong>{$DestinationID}</strong></p>
             <p>Total Price: <strong>€{$price}</strong></p>
         ";
-        $adminMail->AltBody = "Client: {$ClientName} {$ClientSurname}\n
-        Email: {$email}\n
-        DestinationID: {$DestinationID}\n
-        Total Price: €{$price}";
-
         $adminMail->send();
         $status .= "Admin notified.";
+
+        // Delete temp PDF
+        unlink($pdfFilePath);
 
         return $status;
 

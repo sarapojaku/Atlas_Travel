@@ -2,6 +2,8 @@
 session_start();
 include 'db_connect.php';
 require 'send_confirmation.php'; // PHPMailer function
+require 'vendor/autoload.php'; // PHPMailer & dompdf
+use Dompdf\Dompdf;
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $ClientName    = trim($_POST['ClientName']);
@@ -29,15 +31,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $ClientID = $stmt->insert_id;
     }
 
-    // 2. Get destination price
-    $stmt = $conn->prepare("SELECT DestinationPrice FROM destination WHERE DestinationID=?");
+    // 2. Get destination info
+    $stmt = $conn->prepare("SELECT DestinationName, DestinationPrice FROM destination WHERE DestinationID=?");
     $stmt->bind_param("i", $DestinationID);
     $stmt->execute();
     $result = $stmt->get_result();
     $dest = $result->fetch_assoc();
     if (!$dest) die("Destination not found.");
-
     $price = $dest['DestinationPrice'];
+    $destName = $dest['DestinationName'];
 
     // 3. Insert booking
     $stmt = $conn->prepare("INSERT INTO booking (ClientID, DestinationID) VALUES (?, ?)");
@@ -54,15 +56,38 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $stmt->bind_param("di", $price, $DestinationID);
     $stmt->execute();
 
-    // 6. Send confirmation email
-    $emailStatus = sendConfirmationEmail($ClientName, $ClientSurname, $email, $DestinationID, $price);
+    // 6. Generate PDF of the bill
+    $dompdf = new Dompdf();
+    $tax = 0.2 * $price;
+    $totalPrice = $price + $tax;
 
-    // ✅ Store client info in session
+    $billHtml = "
+    <h2>Booking Receipt</h2>
+    <p>Hello {$ClientName} {$ClientSurname},</p>
+    <p>Destination: <strong>{$destName}</strong></p>
+    <p>Price: €" . number_format($price, 2) . "</p>
+    <p>Tax (20%): €" . number_format($tax, 2) . "</p>
+    <p><strong>Total: €" . number_format($totalPrice, 2) . "</strong></p>
+    <p>Date: " . date('d/m/Y') . "</p>
+    ";
+
+    $dompdf->loadHtml($billHtml);
+    $dompdf->setPaper('A4', 'portrait');
+    $dompdf->render();
+
+    $pdfOutput = $dompdf->output();
+    $pdfFilePath = tempnam(sys_get_temp_dir(), 'bill_') . '.pdf';
+    file_put_contents($pdfFilePath, $pdfOutput);
+
+    // 7. Send confirmation email with PDF
+    $emailStatus = sendConfirmationEmailWithPDF($ClientName, $ClientSurname, $email, $DestinationID, $price, $pdfFilePath);
+
+    // 8. Store client info in session
     $_SESSION['clientName'] = $ClientName;
     $_SESSION['clientSurname'] = $ClientSurname;
     $_SESSION['clientEmail'] = $email;
 
-    // 7. Redirect to bill.php
+    // 9. Redirect to bill.php
     header("Location: bill.php?id=$DestinationID&status=success");
     exit;
 }
