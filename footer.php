@@ -42,12 +42,12 @@
     @media (max-width: 600px) {
       .footer-inner {
         flex-direction: column;
-        align-items: flex-start;
-        gap: 1rem; /* space between top and bottom sections */
+        align-items: center;
+        gap: 1rem;
       }
       .footer-right {
         flex-direction: column;
-        align-items: flex-start;
+        align-items: center;
         gap: 0.5rem;
       }
     }
