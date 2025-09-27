@@ -9,19 +9,27 @@ include 'db_connect.php';
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Contact Us</title>
 <style>
-    .contact-form {
-        margin-top: 1rem;
-        display: grid;
-        gap: 0.9rem;
-        margin-left: 200px;
-        margin-right: 200px;
+     body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        background: #f8f8f8;
     }
     .section-head h1,
     .section-head h4 {
         text-align: center;
+        margin: 0.3rem 0;
     }
     .section-head h4 {
         font-weight: lighter;
+        margin-bottom: 1rem;
+    }
+    .contact-form {
+        margin: 1rem auto;
+        display: grid;
+        gap: 0.9rem;
+        width: 80%;
+        max-width: 600px;
     }
     .form-row {
         display: grid;
@@ -33,10 +41,11 @@ include 'db_connect.php';
     .contact-form textarea {
         width: 100%;
         padding: 0.8rem 0.9rem;
-        border: 1px solid var(--border);
-        border-radius: 20px;
+        border: 1px solid #ccc;
+        border-radius: 6px;
         background: #fff;
         font-size: 0.95rem;
+        box-sizing: border-box;
     }
     .contact-form textarea {
         min-height: 100px;
@@ -45,15 +54,15 @@ include 'db_connect.php';
     .contact-form button {
         background: #625d5d;
         color: #ffffff;
-        border-radius: 20px;
+        border-radius: 6px;
         padding: 10px;
         font-size: 15px;
         font-weight: bold;
         border: none;
+        cursor: pointer;
         transition: transform 0.3s ease, box-shadow 0.3s ease;
     }
     .contact-form button:hover {
-        text-decoration: none;
         background: #767778;
         transform: scale(1.05);
         box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
@@ -63,6 +72,24 @@ include 'db_connect.php';
         border-radius: 5px;
         transition: opacity 0.5s ease;
     }
+    @media (max-width: 768px) {
+        .form-row {
+            grid-template-columns: 1fr;
+        }
+        .contact-form {
+            width: 90%;
+        }
+    }
+    @media (max-width: 480px) {
+        .contact-form input,
+        .contact-form select,
+        .contact-form textarea,
+        .contact-form button {
+            font-size: 14px;
+            padding: 0.7rem;
+        }
+    }
+
 </style>
 </head>
 <body>
