@@ -14,6 +14,7 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
+      flex-wrap: wrap; /* allow wrapping on smaller screens */
     }
     .footer-left {
       display: flex;
@@ -36,6 +37,22 @@
       font-weight: 700;
       text-decoration: none;
     }
+
+    /* Mobile layout */
+    @media (max-width: 600px) {
+      .footer-inner {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem; /* space between top and bottom sections */
+      }
+      .footer-right {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.5rem;
+      }
+    }
+</style>
+
     </style>
 </head>
 <body>
