@@ -239,11 +239,11 @@ $pastTrips = $pastQuery->get_result();
           <div class="trip-card">
             <img src="<?= htmlspecialchars($imgPath) ?>" alt="<?= htmlspecialchars($trip['DestinationName']) ?>">
             <div class="trip-card-body-wrapper">
-                <div class="trip-card-body">
-                    <h3><?= htmlspecialchars($trip['DestinationName']) ?></h3>
-                    <p><?= htmlspecialchars($trip['StartDate']) ?> → <?= htmlspecialchars($trip['EndDate']) ?></p>
-                    <p><strong>Paid:</strong> $<?= number_format($trip['DestinationPrice'], 2) ?></p>
-                </div>
+              <div class="trip-card-body">
+                <h3><?= htmlspecialchars($trip['DestinationName']) ?></h3>
+                <p><?= htmlspecialchars($trip['StartDate']) ?> → <?= htmlspecialchars($trip['EndDate']) ?></p>
+                <p><strong>Paid:</strong> $<?= number_format($trip['DestinationPrice'], 2) ?></p>
+              </div>
                 <button class="cancel-btn" onclick="cancelBooking(<?= $trip['BookingID'] ?>, this)">Cancel</button>
             </div>
           </div>
@@ -253,6 +253,7 @@ $pastTrips = $pastQuery->get_result();
       <?php endif; ?>
     </div>
 </section>
+
 
 <!-- Past Trips -->
 <section class="section">
