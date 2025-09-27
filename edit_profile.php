@@ -66,138 +66,156 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   <link rel="icon" href="images/logo.png" type="image/png" />
   <link rel="shortcut icon" href="images/logo.png" type="image/png" />
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      background: #625d5d;
-      margin: 0;
-      padding: 0;
-    }
-    .container {
-      max-width: 700px;
-      margin: 2rem auto;
-      background: #ffffff;
-      padding: 2rem;
-      border-radius: 12px;
-    }
-    h2 {
-      margin-bottom: 1.5rem;
-      color: #333;
-      text-align: center;
-    }
-    img {
-      margin-top: 1rem;
-      width: 120px;
-      height: 120px;
-      border-radius: 50%;
-      object-fit: cover;
-      border: 3px solid #2563eb;
-    }
-    /* Picture section */
-    .picture {
-      display: flex;
-      align-items: center;
-      gap: 2rem;
-      margin-bottom: 2rem;
-    }
-    .pic {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
-    .actions {
-      display: flex;
-      flex-direction: column;
-      gap: 0.5rem;
-      margin-top: 50px;
-    }
-    .remove-btn {
-      background: #dc3545;
-      color: white;
-      border: none;
-      border-radius: 6px;
-      cursor: pointer;
-      font-size: 14px;
-      padding: 8px;
-      margin-top: 5px;
-    }
-    .remove-btn:hover {
-      background: #b02a37;
-    }
-    /* Grid form layout */
-    .form-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 1rem 2rem;
-      margin-top: 1rem;
-    }
-    .form-group {
-      display: flex;
-      flex-direction: column;
-    }
-    .form-group label {
-      font-weight: bold;
-      margin-bottom: 0.3rem;
-      color: #444;
-    }
-    .form-group input,
-    .form-group select {
-      padding: 0.6rem;
-      border: 1px solid #ccc;
-      border-radius: 6px;
-    }
-    /* Change password line */
-    .change-password,
-    .delete-profile {
-      grid-column: span 2;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 10px;
-      font-weight: bold;
-      color: #000;
-    }
-    .change-password{
-      margin-top: 15px;
-    }
-    .change-password a {
-      padding: 6px 12px;
-      background: #2563eb;
-      color: #fff;
-      border-radius: 6px;
-      text-decoration: none;
-      font-size: 14px;
-      font-weight: lighter;
-    }
-    .change-password a:hover {
-      background: #1d4ed8;
-    }
-    .delete-profile a {
-      padding: 6px 12px;
-      background: #c40202ff;
-      color: #fff;
-      border-radius: 6px;
-      text-decoration: none;
-      font-size: 14px;
-      font-weight: lighter;
-    }
-    .delete-profile a:hover {
-      background: #8a0000ff;
-    }
-    /* Save button */
-    .save-btn {
-      grid-column: span 2;
-      margin-top: 1.5rem;
-      padding: 0.8rem 1.2rem;
-      background: #2563eb;
-      color: #fff;
-      border: none;
-      border-radius: 6px;
-      cursor: pointer;
-      font-size: 1rem;
-    }
-    .save-btn:hover {
-      background: #1d4ed8;
-    }
+      body {
+        font-family: Arial, sans-serif;
+        background: #625d5d;
+        margin: 0;
+        padding: 0;
+      }
+      .container {
+        max-width: 700px;
+        margin: 1rem auto;
+        background: #ffffff;
+        padding: 1.5rem;
+        border-radius: 12px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+      }
+      h2 {
+        margin-bottom: 1.2rem;
+        color: #333;
+        text-align: center;
+      }
+      img {
+        margin-top: 1rem;
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 3px solid #2563eb;
+      }
+      /* Picture section */
+      .picture {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 1.5rem;
+        margin-bottom: 1.5rem;
+        flex-wrap: wrap; /* ✅ Wraps on mobile */
+      }
+      .pic {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+      .actions {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+        margin-top: 10px;
+      }
+      .remove-btn {
+        background: #dc3545;
+        color: white;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 14px;
+        padding: 8px;
+      }
+      .remove-btn:hover {
+        background: #b02a37;
+      }
+      /* Grid form layout */
+      .form-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1rem 1.5rem;
+        margin-top: 1rem;
+      }
+      .form-group {
+        display: flex;
+        flex-direction: column;
+      }
+      .form-group label {
+        font-weight: bold;
+        margin-bottom: 0.3rem;
+        color: #444;
+      }
+      .form-group input,
+      .form-group select {
+        padding: 0.6rem;
+        border: 1px solid #ccc;
+        border-radius: 6px;
+      }
+      /* Change password & delete */
+      .change-password,
+      .delete-profile {
+        grid-column: span 2;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        font-weight: bold;
+        color: #000;
+        text-align: center;
+        flex-wrap: wrap;
+      }
+      .change-password a,
+      .delete-profile a {
+        padding: 6px 12px;
+        border-radius: 6px;
+        text-decoration: none;
+        font-size: 14px;
+        font-weight: lighter;
+      }
+      .change-password a {
+        background: #2563eb;
+        color: #fff;
+      }
+      .change-password a:hover {
+        background: #1d4ed8;
+      }
+      .delete-profile a {
+        background: #c40202ff;
+        color: #fff;
+      }
+      .delete-profile a:hover {
+        background: #8a0000ff;
+      }
+      /* Save button */
+      .save-btn {
+        grid-column: span 2;
+        margin-top: 1.5rem;
+        padding: 0.8rem 1.2rem;
+        background: #2563eb;
+        color: #fff;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 1rem;
+      }
+      .save-btn:hover {
+        background: #1d4ed8;
+      }
+      /* ✅ Mobile responsiveness */
+      @media (max-width: 768px) {
+        .form-grid {
+          grid-template-columns: 1fr; /* one column */
+        }
+        .save-btn {
+          grid-column: span 1;
+        }
+        .change-password,
+        .delete-profile {
+          grid-column: span 1;
+          flex-direction: column;
+          text-align: center;
+        }
+        .picture {
+          flex-direction: column; /* stack picture + actions */
+          gap: 1rem;
+        }
+      }
   </style>
 </head>
 <body>
