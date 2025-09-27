@@ -55,7 +55,8 @@ h1 {
     text-align: center;
     margin: 1rem 0;
 }
-/* Summary cards */
+
+/* Summary Cards */
 .cards {
     display: flex;
     justify-content: center;
@@ -71,6 +72,8 @@ h1 {
     text-align: center;
     box-shadow: 0 2px 6px rgba(0,0,0,0.3);
     transition: transform 0.3s ease, box-shadow 0.3s ease;
+    min-width: 200px;
+    max-width: 250px;
 }
 .card:hover {
     transform: scale(1.05);
@@ -91,13 +94,13 @@ h1 {
     margin-top: 0.5rem;
 }
 
-/* Destination cards */
+/* Destination Cards */
 .destinations-container {
     width: 90%;
     max-width: 1000px;
     margin: 2rem auto;
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
     gap: 1rem;
 }
 
@@ -110,6 +113,7 @@ h1 {
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
+    word-wrap: break-word; /* Text wraps inside card */
 }
 
 .destination-card h3 {
@@ -123,7 +127,7 @@ h1 {
     color: #555;
 }
 
-/* Responsive */
+/* Responsive adjustments */
 @media (max-width: 768px) {
     .cards { flex-direction: column; align-items: center; }
     .destinations-container { grid-template-columns: 1fr; }
