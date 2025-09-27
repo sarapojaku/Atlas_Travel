@@ -29,15 +29,23 @@ function sendConfirmationEmail($ClientName, $ClientSurname, $email, $Destination
         $mail->Body    = "
             <h2>Booking Confirmation</h2>
             <p>Dear <strong>{$ClientName} {$ClientSurname}</strong>,</p>
-            <p>Thank you for booking with <strong>Travel Atlas</strong>.</p>
-            <p>Your booking has been confirmed. The total cost is: <strong>€{$price}</strong>.</p>
-            <p>We look forward to your trip!</p>
+            <p>We are pleased to confirm your booking with <strong>Travel Atlas</strong>.
+            The total cost is: <strong>€{$price}</strong>. 
+            Our team is dedicated to ensuring you have an enjoyable and seamless travel experience. 
+            Should you have any questions or require assistance before your trip, please do not hesitate to contact us.</p>
+            <p>Thank you for choosing Travel Atlas. We look forward to welcoming you on your journey!</p>
+            <p>warm regards,</p>
+            <p><strong>Travel Atlas Team</strong></p>
         ";
         $mail->AltBody = "Dear {$ClientName} {$ClientSurname},\n\n
-        Thank you for booking with Travel Atlas.\n
+        We are pleased to confirm your booking with Travel Atlas.\n
         Your booking has been confirmed.\n 
         The total cost is: €{$price}.\n
-        We look forward to your trip!";
+        Our team is dedicated to ensuring you have an enjoyable and seamless travel experience. \n
+        Should you have any questions or require assistance before your trip, please do not hesitate to contact us.\n
+        Thank you for choosing Travel Atlas. We look forward to welcoming you on your journey!\n
+        Warm regards,\n
+        Travel Atlas Team";
 
         $mail->send();
         $status .= "Client email sent to {$email}. ";
