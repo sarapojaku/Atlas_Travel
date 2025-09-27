@@ -141,8 +141,9 @@ $paymentDate = date("M/d/Y");
       box-shadow: inset 0 0 0 9999px var(--bs-table-accent-bg);
     }
 
-    .text-purple {
-      color: #6f42c1;
+    .text-purple,
+    .text-purple:hover {
+      color: #000000;
     }
   </style>
 </head>
@@ -231,7 +232,10 @@ $paymentDate = date("M/d/Y");
             </div>
           </div>
 
-          <!-- <a href="#!" class="btn btn-dark btn-lg card-footer-btn justify-content-center text-uppercase-bold-sm hover-lift-light"></a> -->
+          <button class="btn btn-primary text-uppercase">
+            <a href='index.php' style="color: inherit; text-decoration: none;">Home</a>
+          </button>
+
         </div>
       </div>
     </div>
