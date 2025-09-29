@@ -92,5 +92,5 @@ Default images are used if no profile/destination image is provided
 Admin can manage all users, staff, destinations, and bookings
 Client dashboard is fully interactive and showcases spending and trip history
 
-🛠 Roadmap / To-Do
+🛠 Improvements
 - Add a bill button in the Upcoming Trips in myProfile.php so they can download the bill from there too
