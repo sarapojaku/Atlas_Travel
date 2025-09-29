@@ -25,7 +25,7 @@ if ($selectedCountry) {
                    d.StartDate, d.EndDate, c.CountryName
             FROM destination d
             JOIN country c ON d.CountryID = c.CountryID
-            WHERE c.CountryID = ?
+            WHERE c.CountryID = ? AND d.StartDate >= CURDATE()
             LIMIT ? OFFSET ?";
     $stmt = $conn->prepare($sql);
     $stmt->bind_param("iii", $selectedCountry, $limit, $offset);
@@ -33,7 +33,7 @@ if ($selectedCountry) {
     $result = $stmt->get_result();
 
     // Count total for pagination
-    $countSql = "SELECT COUNT(*) AS total FROM destination WHERE CountryID = ?";
+    $countSql = "SELECT COUNT(*) AS total FROM destination WHERE CountryID = ? AND StartDate >= CURDATE()";
     $countStmt = $conn->prepare($countSql);
     $countStmt->bind_param("i", $selectedCountry);
     $countStmt->execute();
@@ -43,6 +43,7 @@ if ($selectedCountry) {
                    d.StartDate, d.EndDate, c.CountryName
             FROM destination d
             JOIN country c ON d.CountryID = c.CountryID
+            WHERE d.StartDate >= CURDATE()
             LIMIT ? OFFSET ?";
     $stmt = $conn->prepare($sql);
     $stmt->bind_param("ii", $limit, $offset);
@@ -50,7 +51,7 @@ if ($selectedCountry) {
     $result = $stmt->get_result();
 
     // Count total for pagination
-    $countSql = "SELECT COUNT(*) AS total FROM destination";
+    $countSql = "SELECT COUNT(*) AS total FROM destination WHERE StartDate >= CURDATE()";
     $total = $conn->query($countSql)->fetch_assoc()['total'];
 }
 
@@ -240,7 +241,6 @@ body {
         width: 100%;
     }
 }
-
 </style>
 </head>
 <body>
