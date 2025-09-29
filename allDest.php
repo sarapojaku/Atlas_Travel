@@ -291,7 +291,7 @@ body {
                                 <p><b>Country:</b> <?php echo htmlspecialchars($dest['CountryName']); ?></p>
                             </div>
                             <div class="card-action">
-                                <a href="info.php?id=<?php echo $dest['DestinationID']; ?>" class="learn-more">Learn More</a>
+                                <a href="booking.php?id=<?php echo $dest['DestinationID']; ?>" class="learn-more">Learn More</a>
                             </div>
                         </div>
                 </div>
