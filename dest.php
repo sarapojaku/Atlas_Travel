@@ -213,7 +213,8 @@ $imagePath = "uploads/";
             <li>End: <?php echo htmlspecialchars($dest['EndDate']); ?></li> 
             <li>Price: €<?php echo htmlspecialchars($dest['DestinationPrice']); ?></li> 
           </ul> 
-          <a href="info.php?id=<?php echo $dest['DestinationID']; ?>" class="learn-more">Learn More</a> 
+          <a href="booking.php?id=<?php echo $dest['DestinationID']; ?>" class="learn-more">Learn More</a> 
+
         </div> 
       <?php endforeach; ?> 
     </div> 
@@ -260,7 +261,7 @@ $imagePath = "uploads/";
             <li>End: ${dest.EndDate}</li>
             <li>Price: €${dest.DestinationPrice}</li>
           </ul>
-          <a href="info.php?id=${dest.DestinationID}" class="learn-more">Learn More</a>
+          <a href="booking.php?id=${dest.DestinationID}" class="learn-more">Learn More</a>
         `;
         deals.appendChild(div);
       });
