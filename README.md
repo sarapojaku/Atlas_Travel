@@ -93,4 +93,8 @@ Admin can manage all users, staff, destinations, and bookings
 Client dashboard is fully interactive and showcases spending and trip history
 
 🛠 Improvements
-- Add a bill button in the Upcoming Trips in myProfile.php so they can download the bill from there too
+- Add a Bill button under Upcoming Trips in myProfile.php, allowing users to download their bill directly from there.
+- Enable clients to select their own travel dates.
+- Allow clients to save their payment cards for future bookings (optional).
+- Introduce exclusive special offers for loyal customers.
+- Display available airlines for each destination.
