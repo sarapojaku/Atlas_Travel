@@ -93,6 +93,4 @@ Admin can manage all users, staff, destinations, and bookings
 Client dashboard is fully interactive and showcases spending and trip history
 
 🛠 Roadmap / To-Do
-- Fix booking cancellation button so it deletes the booking from spending and revenue columns
 - Add a bill button in the Upcoming Trips in myProfile.php so they can download the bill from there too
-- Etc…
