@@ -1,9 +1,10 @@
 <?php  
 include 'db_connect.php'; 
 
-// Fetch all destinations 
+// Fetch only destinations that have not started yet (or start today)
 $sql = "SELECT DestinationID, DestinationName, DestinationImage, DestinationPrice, StartDate, EndDate 
         FROM destination 
+        WHERE StartDate >= CURDATE() 
         ORDER BY RAND()
         LIMIT 10"; 
 $result = $conn->query($sql);
@@ -18,7 +19,8 @@ if ($result && $result->num_rows > 0) {
 
 // Path to uploaded images 
 $imagePath = "uploads/"; 
-?> 
+?>
+
 
 <!DOCTYPE html> 
 <html lang="en"> 
