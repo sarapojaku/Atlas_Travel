@@ -183,6 +183,7 @@ form button:hover {
 <form action="addDest.php" method="post" enctype="multipart/form-data">
     <input type="text" name="DestinationName" placeholder="Destination Name" required>
     <input type="text" name="DestinationInfo" placeholder="Destination Info" required>
+    <input type="text" name="DestinationPlaces" placeholder="Destination Places" required>
     <input type="number" name="DestinationPrice" placeholder="Destination Price" required>
     <input type="date" name="StartDate" placeholder="Start Date" required>
     <input type="date" name="EndDate" placeholder="End Date" required>
@@ -201,7 +202,7 @@ form button:hover {
 <div class="destinations-container" id="destinationsContainer">
 <?php 
 $result = $conn->query("
-    SELECT DestinationID, DestinationName, DestinationInfo, DestinationPrice, StartDate, EndDate, DestinationImage, CountryID
+    SELECT DestinationID, DestinationName, DestinationInfo, DestinationPlaces, DestinationPrice, StartDate, EndDate, DestinationImage, CountryID
     FROM destination
     ORDER BY StartDate ASC
 ");
@@ -211,6 +212,7 @@ while($row = $result->fetch_assoc()) {
     echo "<div class='destination-card'>
             <h3>{$row['DestinationName']}</h3>
             <div class='destination-info'><strong>Info:</strong> {$row['DestinationInfo']}</div>
+            <div class='destination-info'><strong>Places:</strong> {$row['DestinationPlaces']}</div>
             <div class='destination-info'><strong>Price:</strong> {$row['DestinationPrice']}</div>
             <div class='destination-info'><strong>Start:</strong> {$row['StartDate']}</div>
             <div class='destination-info'><strong>End:</strong> {$row['EndDate']}</div>
