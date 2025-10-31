@@ -65,7 +65,7 @@
         <div class="footer-right">
           <a href="tel:+355693575102" class="muted">+355 69 357 5102</a>
           <a href="https://www.instagram.com/whyhatesara/">Instagram</a>
-          <a href="#">Facebook</a>
+          <a href="https://www.facebook.com/profile.php?id=61550570165236">Facebook</a>
         </div>
       </div>
     </footer>
