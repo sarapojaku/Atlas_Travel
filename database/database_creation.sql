@@ -45,7 +45,6 @@ CREATE TABLE IF NOT EXISTS `destination` (
 );
 
 -- Create Booking table
-
 CREATE TABLE IF NOT EXISTS `booking` (
   `BookingID` INT AUTO_INCREMENT PRIMARY KEY,
   `ClientID` INT,
@@ -54,3 +53,9 @@ CREATE TABLE IF NOT EXISTS `booking` (
   FOREIGN KEY (`DestinationID`) REFERENCES `destination`(`DestinationID`)
 );
 
+--Create messages table
+CREATE TABLE IF NOT EXISTS `contact_messages` (
+  `name` VARCHAR(255),
+  `contact` TEXT,
+  `message` TEXT
+)
