@@ -10,6 +10,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['submit'])) {
     $StartDate = trim($_POST['StartDate']);
     $EndDate = trim($_POST['EndDate']);
     $CountryID = $_POST['CountryID'];
+    $DestinationPlaces = trim($_POST['DestinationPlaces']);
 
     // Handle file upload
     $DestinationImage = "";
@@ -25,8 +26,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['submit'])) {
     }
 
     // Insert destination
-    $insert = $conn->prepare("INSERT INTO destination (DestinationName, DestinationInfo, DestinationPrice, StartDate, EndDate, DestinationImage, CountryID) VALUES (?, ?, ?, ?, ?, ?, ?)");
-    $insert->bind_param("ssdsssi", $DestinationName, $DestinationInfo, $DestinationPrice, $StartDate, $EndDate, $DestinationImage, $CountryID);
+    $insert = $conn->prepare("INSERT INTO destination (DestinationName, DestinationInfo, DestinationPrice, DestinationPlaces, StartDate, EndDate, DestinationImage, CountryID) VALUES (?, ?, ?, ?, ?, ?, ?)");
+    $insert->bind_param("ssdssssi", $DestinationName, $DestinationInfo, $DestinationPrice, $DestinationPlaces, $StartDate, $EndDate, $DestinationImage, $CountryID);
 
     if ($insert->execute()) {
         echo "<script>alert('Destination added successfully'); window.location.href='admin.php#destinations';</script>";

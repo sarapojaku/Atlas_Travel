@@ -107,9 +107,7 @@ if (isset($_GET['id'])) {
         
         <input type="date" name="EndDate" value="<?= htmlspecialchars($destination['EndDate']) ?>" required>
 
-        <!-- <input type="file" name="Image" value="<?= htmlspecialchars($destination['DestinationImage']) ?>" required> -->
-<p>Current Image:</p> <img src="uploads/<?= htmlspecialchars($destination['DestinationImage']) ?>" alt="Destination Image"> <p>Upload New Image:</p> <input type="file" name="DestinationImage" accept="image/*">
-
+<p>Current Image:</p> <a class="download-link" href="uploads/<?= htmlspecialchars($destination['DestinationImage']) ?>" download> <?= htmlspecialchars($destination['DestinationImage']) ?> </a> <p>Upload New Image:</p> <input type="file" name="DestinationImage" accept="image/*">
         <br>
         <button type="submit" name="submit">Update Destination</button>
     </form>
