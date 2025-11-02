@@ -24,7 +24,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if ($client) {
         $ClientID = $client['ClientID'];
     } else {
-        $stmt = $conn->prepare("INSERT INTO client (ClientName, ClientSurname, Email, Spending, Rating) VALUES (?, ?, ?, 0, 0)");
+        $stmt = $conn->prepare("INSERT INTO client (ClientName, ClientSurname, Email, Spending) VALUES (?, ?, ?, 0)");
         $stmt->bind_param("sss", $ClientName, $ClientSurname, $email);
         $stmt->execute();
         $ClientID = $stmt->insert_id;
