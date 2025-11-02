@@ -17,15 +17,16 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['submit'])) {
     $DestinationPrice = floatval($_POST['DestinationPrice']);
     $StartDate       = trim($_POST['StartDate']);
     $EndDate         = trim($_POST['EndDate']);
+    $DestinationImage = trim($_POST['DestinationImage']);
 
     // Update query
     $update = $conn->prepare("
         UPDATE destination 
-        SET DestinationName = ?, DestinationInfo = ?, DestinationPrice = ?, StartDate = ?, EndDate = ?
+        SET DestinationName = ?, DestinationInfo = ?, DestinationPrice = ?, StartDate = ?, EndDate = ?, DestinationImage = ?
         WHERE DestinationID = ?
         ");
     
-    $update->bind_param("ssdssi", $DestinationName, $DestinationInfo, $DestinationPrice, $StartDate, $EndDate, $DestinationID);
+    $update->bind_param("ssdsssi", $DestinationName, $DestinationInfo, $DestinationPrice, $StartDate, $EndDate, $DestinationImage, $DestinationID);
 
     if ($update->execute()) {
         redirectWithMessage("Destination updated successfully");
@@ -105,6 +106,9 @@ if (isset($_GET['id'])) {
         <input type="date" name="StartDate" value="<?= htmlspecialchars($destination['StartDate']) ?>" required>
         
         <input type="date" name="EndDate" value="<?= htmlspecialchars($destination['EndDate']) ?>" required>
+
+        <!-- <input type="file" name="Image" value="<?= htmlspecialchars($destination['DestinationImage']) ?>" required> -->
+<p>Current Image:</p> <img src="uploads/<?= htmlspecialchars($destination['DestinationImage']) ?>" alt="Destination Image"> <p>Upload New Image:</p> <input type="file" name="DestinationImage" accept="image/*">
 
         <br>
         <button type="submit" name="submit">Update Destination</button>
