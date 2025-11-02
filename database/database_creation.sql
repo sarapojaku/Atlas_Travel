@@ -18,14 +18,14 @@ CREATE TABLE IF NOT EXISTS `client` (
   `Reviews` TEXT,
   `ProfileImage` VARCHAR(255),
   `Spending` INT,
-  `Rating`  INT,
+  `Rating`  INT
 );
 
 -- Create Country table
 CREATE TABLE IF NOT EXISTS `country` (
   `CountryID` INT AUTO_INCREMENT PRIMARY KEY,
   `CountryName` VARCHAR(100),
-  `CountryInfo` TEXT,
+  `CountryInfo` TEXT
 );
 
 -- Create Destination table
@@ -42,6 +42,21 @@ CREATE TABLE IF NOT EXISTS `destination` (
   `Revenue` DECIMAL(10, 2),
   `CountryID` INT,
   FOREIGN KEY (`CountryID`) REFERENCES `Country`(`CountryID`)
+);
+
+-- Create Staff table
+CREATE TABLE IF NOT EXISTS `staff` (
+    `StaffID` INT AUTO_INCREMENT PRIMARY KEY,
+    `StaffName` VARCHAR(50) NOT NULL,
+    `StaffSurname` VARCHAR(50) NOT NULL,
+    `Username` VARCHAR(50) NOT NULL UNIQUE,
+    `Email` VARCHAR(100) NOT NULL UNIQUE,
+    `Gender` ENUM('Male', 'Female', 'Other') NOT NULL,
+    `Phone` VARCHAR(20),
+    `Password` VARCHAR(255) NOT NULL,
+    `Type` ENUM('Admin', 'Staff', 'Manager') NOT NULL,
+    `DateEmployed` DATE NOT NULL,
+    `ProfileImage` VARCHAR(255),
 );
 
 -- Create Booking table
